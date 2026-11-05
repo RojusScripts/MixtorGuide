@@ -1,0 +1,2755 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mixtor Audio Editor V1.0 — Official User Manual</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-page: #f8fafc;
+            --bg-surface: #ffffff;
+            --bg-sidebar: #ffffff;
+            --border-color: #e2e8f0;
+            --border-hover: #cbd5e1;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --text-heading: #0f172a;
+            --accent-primary: #0284c7;
+            --accent-hover: #0369a1;
+            --accent-subtle: #f0f9ff;
+            --accent-border: #bae6fd;
+            --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            --font-mono: 'JetBrains Mono', SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+            --sidebar-width: 330px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            font-size: 16px;
+        }
+
+        body {
+            font-family: var(--font-sans);
+            color: var(--text-main);
+            background-color: var(--bg-page);
+            line-height: 1.68;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* App Layout */
+        .manual-wrapper {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar Styles */
+        .manual-sidebar {
+            width: var(--sidebar-width);
+            background: var(--bg-sidebar);
+            border-right: 1px solid var(--border-color);
+            position: fixed;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            display: flex;
+            flex-direction: column;
+            z-index: 100;
+            box-shadow: 1px 0 3px rgba(0,0,0,0.02);
+        }
+
+        .sidebar-brand {
+            padding: 22px 20px 16px 20px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: #ffffff;
+        }
+
+        .sidebar-brand-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .sidebar-logo {
+            height: 30px;
+            width: auto;
+            display: block;
+        }
+
+        .sidebar-brand-text {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--text-heading);
+            letter-spacing: -0.3px;
+        }
+
+        .sidebar-badge {
+            font-size: 10px;
+            font-weight: 700;
+            padding: 2px 7px;
+            border-radius: 9999px;
+            background: var(--accent-subtle);
+            color: var(--accent-primary);
+            border: 1px solid var(--accent-border);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .sidebar-search-box {
+            padding: 12px 18px;
+            border-bottom: 1px solid var(--border-color);
+            background: #fbfcfe;
+        }
+
+        .sidebar-search-input {
+            width: 100%;
+            padding: 8px 12px;
+            font-size: 12.5px;
+            font-family: var(--font-sans);
+            color: var(--text-main);
+            background: #ffffff;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            outline: none;
+            transition: all 0.15s ease;
+        }
+
+        .sidebar-search-input:focus {
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.12);
+        }
+
+        .sidebar-nav {
+            flex: 1;
+            overflow-y: auto;
+            padding: 14px 12px 30px 12px;
+        }
+
+        .sidebar-nav::-webkit-scrollbar {
+            width: 5px;
+        }
+        .sidebar-nav::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+
+        .toc-item {
+            margin-bottom: 2px;
+        }
+
+        .toc-link {
+            display: flex;
+            align-items: baseline;
+            text-decoration: none;
+            color: var(--text-main);
+            border-radius: 6px;
+            padding: 6px 10px;
+            font-size: 13px;
+            line-height: 1.4;
+            transition: all 0.15s ease;
+        }
+
+        .toc-link:hover {
+            background: #f1f5f9;
+            color: var(--text-heading);
+        }
+
+        .toc-link.active {
+            background: var(--accent-subtle);
+            color: var(--accent-primary);
+            font-weight: 600;
+        }
+
+        .toc-chapter > .chapter-link {
+            font-weight: 600;
+            color: var(--text-heading);
+            font-size: 13px;
+            margin-top: 10px;
+            padding: 7px 10px;
+        }
+
+        .toc-sec > .sec-link {
+            padding-left: 20px;
+            font-size: 12.5px;
+            color: #475569;
+        }
+
+        .toc-subsec > .subsec-link {
+            padding-left: 32px;
+            font-size: 12px;
+            color: #64748b;
+        }
+
+        .toc-badge {
+            font-family: var(--font-mono);
+            font-size: 11px;
+            color: #7c3aed;
+            margin-right: 8px;
+            font-weight: 700;
+        }
+
+        .toc-bullet {
+            font-size: 10px;
+            color: #94a3b8;
+            margin-right: 8px;
+        }
+
+        /* Main Content Container */
+        .manual-main {
+            margin-left: var(--sidebar-width);
+            flex: 1;
+            background: #ffffff;
+            min-width: 0;
+            display: flex;
+            justify-content: center;
+        }
+
+        .manual-container {
+            max-width: 900px;
+            width: 100%;
+            padding: 48px 56px 120px 56px;
+        }
+
+        /* Document Hero */
+        .doc-hero {
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 36px;
+            margin-bottom: 48px;
+        }
+
+        .hero-logo-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 24px;
+        }
+
+        .hero-logo-img {
+            height: 48px;
+            width: auto;
+        }
+
+        .hero-version-pill {
+            font-family: var(--font-mono);
+            font-size: 12px;
+            font-weight: 600;
+            background: #0f172a;
+            color: #ffffff;
+            padding: 5px 12px;
+            border-radius: 9999px;
+            letter-spacing: 0.5px;
+        }
+
+        .hero-title {
+            font-size: 38px;
+            font-weight: 800;
+            letter-spacing: -1px;
+            color: var(--text-heading);
+            margin-bottom: 12px;
+            line-height: 1.15;
+        }
+
+        .hero-subtitle {
+            font-size: 14px;
+            color: #475569;
+            margin-bottom: 20px;
+            font-weight: 400;
+            line-height: 1.6;
+        }
+
+        .hero-credits {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            font-size: 14px;
+            line-height: 1.55;
+            color: #475569;
+        }
+
+        .hero-credits p {
+            margin: 0;
+            color: #475569;
+        }
+
+        .hero-credits a {
+            color: var(--accent-primary);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .hero-credits a:hover {
+            text-decoration: underline;
+        }
+
+        /* Headings */
+        .chapter-heading {
+            font-size: 26px;
+            font-weight: 800;
+            color: #7c3aed;
+            letter-spacing: -0.6px;
+            border-bottom: 2px solid #7c3aed;
+            padding-bottom: 10px;
+            margin-top: 60px;
+            margin-bottom: 22px;
+            scroll-margin-top: 30px;
+            display: flex;
+            align-items: center;
+        }
+
+        .heading-inline-icon {
+            height: 24px;
+            width: auto;
+            vertical-align: middle;
+            margin-left: 10px;
+            display: inline-block;
+        }
+
+        .subsection-heading {
+            font-size: 19px;
+            font-weight: 700;
+            color: var(--text-heading);
+            letter-spacing: -0.4px;
+            margin-top: 36px;
+            margin-bottom: 16px;
+            scroll-margin-top: 30px;
+        }
+
+        .sub-subsection-heading {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-heading);
+            margin-top: 26px;
+            margin-bottom: 12px;
+            scroll-margin-top: 30px;
+        }
+
+        /* Paragraphs and Text */
+        .manual-p {
+            margin-bottom: 16px;
+            font-size: 15px;
+            color: #334155;
+            line-height: 1.72;
+        }
+
+        strong, b {
+            font-weight: 700;
+            color: var(--text-heading);
+        }
+
+        em, i {
+            font-style: italic;
+        }
+
+        /* Figures & Images */
+        .manual-figure {
+            margin: 16px 0 20px 0;
+            background: transparent;
+            border: none;
+            border-radius: 0;
+            padding: 0;
+            display: inline-block;
+            box-shadow: none;
+            max-width: 100%;
+        }
+
+        .manual-figure img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 0;
+            display: block;
+        }
+
+        .manual-figure figcaption {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-top: 6px;
+            font-weight: 500;
+            text-align: left;
+        }
+
+        /* Numbered Steps */
+        .manual-step {
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+            margin-bottom: 12px;
+            padding-left: 0;
+        }
+
+        .step-num {
+            font-family: var(--font-mono);
+            font-weight: 700;
+            font-size: 15px;
+            color: #7c3aed;
+            background: none;
+            border: none;
+            width: auto;
+            height: auto;
+            border-radius: 0;
+            display: inline-block;
+            flex-shrink: 0;
+            margin-top: 0;
+            min-width: 22px;
+        }
+
+        .step-content {
+            font-size: 15px;
+            line-height: 1.65;
+            color: #334155;
+            flex: 1;
+        }
+
+        /* Shortcuts Table */
+        .shortcut-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 14px;
+            background: #f8fafc;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            margin-bottom: 8px;
+            gap: 16px;
+        }
+
+        .shortcut-key kbd {
+            font-family: var(--font-mono);
+            font-size: 12.5px;
+            font-weight: 600;
+            color: #0f172a;
+            background: #ffffff;
+            border: 1px solid #cbd5e1;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.06);
+            padding: 3px 8px;
+            border-radius: 4px;
+            display: inline-block;
+        }
+
+        .shortcut-desc {
+            font-size: 14px;
+            color: #475569;
+            font-weight: 500;
+        }
+
+        /* Footer */
+        .manual-footer {
+            margin-top: 80px;
+            padding-top: 32px;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 13px;
+            color: var(--text-muted);
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .back-to-top {
+            position: fixed;
+            bottom: 28px;
+            right: 28px;
+            background: #0f172a;
+            color: #ffffff;
+            text-decoration: none;
+            padding: 10px 16px;
+            border-radius: 9999px;
+            font-size: 12px;
+            font-weight: 600;
+            box-shadow: 0 4px 14px rgba(0,0,0,0.15);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s ease;
+            opacity: 0.9;
+        }
+
+        .back-to-top:hover {
+            background: var(--accent-primary);
+            opacity: 1;
+            transform: translateY(-2px);
+        }
+
+        /* Responsive Layout */
+        @media (max-width: 1024px) {
+            .manual-sidebar {
+                width: 280px;
+            }
+            .manual-main {
+                margin-left: 280px;
+            }
+            .manual-container {
+                padding: 32px 36px 90px 36px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .manual-wrapper {
+                flex-direction: column;
+            }
+            .manual-sidebar {
+                position: relative;
+                width: 100%;
+                height: auto;
+                max-height: 400px;
+            }
+            .manual-main {
+                margin-left: 0;
+            }
+            .manual-container {
+                padding: 24px 20px 80px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="manual-wrapper">
+        <!-- Interactive Sidebar Index -->
+        <aside class="manual-sidebar">
+            <div class="sidebar-brand">
+                <div class="sidebar-brand-left">
+                    <img src="Pics/MIXTOR_LOGO.svg" alt="Mixtor Logo" class="sidebar-logo">
+                    <span class="sidebar-brand-text">Mixtor Docs</span>
+                </div>
+                <span class="sidebar-badge">V1.0</span>
+            </div>
+            <div class="sidebar-search-box">
+                <input type="text" id="toc-search" class="sidebar-search-input" placeholder="Search chapters & topics..." autocomplete="off">
+            </div>
+            <nav class="sidebar-nav" id="sidebar-nav">
+                
+        <div class="toc-item toc-chapter" data-target="chapter-1">
+            <a href="#chapter-1" class="toc-link chapter-link">
+                <span class="toc-badge">1</span>
+                <span class="toc-title">1. WELCOME &amp; 1-CLICK NATIVE INSTALLATION</span>
+            </a>
+        </div>
+        <div class="toc-item toc-sec" data-target="section-1-1">
+            <a href="#section-1-1" class="toc-link sec-link">
+                <span class="toc-bullet">•</span>
+                <span class="toc-title">1.1 WHAT IS MIXTOR?</span>
+            </a>
+        </div>
+        <div class="toc-item toc-sec" data-target="section-1-2">
+            <a href="#section-1-2" class="toc-link sec-link">
+                <span class="toc-bullet">•</span>
+                <span class="toc-title">1.2 MacOS INSTALLATION (.PKG 1-CLICK INSTALLER)</span>
+            </a>
+        </div>
+        <div class="toc-item toc-sec" data-target="section-1-3">
+            <a href="#section-1-3" class="toc-link sec-link">
+                <span class="toc-bullet">•</span>
+                <span class="toc-title">1.3 WINDOWS INSTALLATION (.EXE 1-CLICK INSTALLER)</span>
+            </a>
+        </div>
+        <div class="toc-item toc-sec" data-target="section-1-4">
+            <a href="#section-1-4" class="toc-link sec-link">
+                <span class="toc-bullet">•</span>
+                <span class="toc-title">1.4 HOW TO OPEN MIXTOR.</span>
+            </a>
+        </div>
+        <div class="toc-item toc-sec" data-target="section-1-5">
+            <a href="#section-1-5" class="toc-link sec-link">
+                <span class="toc-bullet">•</span>
+                <span class="toc-title">1.5 PERMISSIONS</span>
+            </a>
+        </div>
+        <div class="toc-item toc-sec" data-target="section-1-6">
+            <a href="#section-1-6" class="toc-link sec-link">
+                <span class="toc-bullet">•</span>
+                <span class="toc-title">1.6 OPERATING SYSTEM MICROPHONE PERMISSIONS</span>
+            </a>
+        </div>
+        <div class="toc-item toc-chapter" data-target="chapter-2">
+            <a href="#chapter-2" class="toc-link chapter-link">
+                <span class="toc-badge">2</span>
+                <span class="toc-title">2. QUICK START</span>
+            </a>
+        </div>
+        <div class="toc-item toc-sec" data-target="section-2-1">
+            <a href="#section-2-1" class="toc-link sec-link">
+                <span class="toc-bullet">•</span>
+                <span class="toc-title">2.1 THE GOLDEN RULE: AN ACTIVE COMPOSITION MUST BE OPEN &amp;amp; SELECTED</span>
+            </a>
+        </div>
+        <div class="toc-item toc-sec" data-target="section-2-2">
+            <a href="#section-2-2" class="toc-link sec-link">
+                <span class="toc-bullet">•</span>
+                <span class="toc-title">2.2 IMPORTING AUDIO: DRAG &amp;amp; DROP SIMPLICITY</span>
+            </a>
+        </div>
+        <div class="toc-item toc-sec" data-target="section-2-3">
+            <a href="#section-2-3" class="toc-link sec-link">
+                <span class="toc-bullet">•</span>
+                <span class="toc-title">2.3 AUTOMATIC DETECTION OF EXISTING AUDIO LAYERS</span>
+            </a>
+        </div>
+        <div class="toc-item toc-sec" data-target="section-2-4">
+            <a href="#section-2-4" class="toc-link sec-link">
+                <span class="toc-bullet">•</span>
+                <span class="toc-title">2.4 LOCK TO COMPOSITION (&quot;LOCK TO COMP&quot;)</span>
+            </a>
+        </div>
+        <div class="toc-item toc-chapter" data-target="chapter-3">
+            <a href="#chapter-3" class="toc-link chapter-link">
+                <span class="toc-badge">3</span>
+                <span class="toc-title">3. FULL INTERFACE TOUR</span>
+            </a>
+        </div>
+        <div class="toc-item toc-sec" data-target="section-3-1">
+            <a href="#section-3-1" class="toc-link sec-link">
+                <span class="toc-bullet">•</span>
+                <span class="toc-title">3.1 TOP HEADER TOOLBAR</span>
+            </a>
+        </div>
+        <div class="toc-item toc-sec" data-target="section-3-2">
+            <a href="#section-3-2" class="toc-link sec-link">
+                <span class="toc-bullet">•</span>
+                <span class="toc-title">3.2 TRANSPORT CONTROLS &amp;amp; TIMECODE DISPLAY</span>
+            </a>
+        </div>
+        <div class="toc-item toc-sec" data-target="section-3-3">
+            <a href="#section-3-3" class="toc-link sec-link">
+                <span class="toc-bullet">•</span>
+                <span class="toc-title">3.3 TRACK HEADERS &amp;amp; CHANNEL STRIPS</span>
+            </a>
+        </div>
+        <div class="toc-item toc-sec" data-target="section-3-4">
+            <a href="#section-3-4" class="toc-link sec-link">
+                <span class="toc-bullet">•</span>
+                <span class="toc-title">3.4 MASTER TRACK &amp;amp; OUTPUT FADER</span>
+            </a>
+        </div>
+        <div class="toc-item toc-sec" data-target="section-3-5">
+            <a href="#section-3-5" class="toc-link sec-link">
+                <span class="toc-bullet">•</span>
+                <span class="toc-title">3.5 MULTITRACK TIMELINE CANVAS &amp;amp; PLAYHEAD</span>
+            </a>
+        </div>
+        <div class="toc-item toc-sec" data-target="section-3-6">
+            <a href="#section-3-6" class="toc-link sec-link">
+                <span class="toc-bullet">•</span>
+                <span class="toc-title">3.6 SCROLLBARS &amp;amp; NAVIGATION ZOOM CONTROLS</span>
+            </a>
+        </div>
+        <div class="toc-item toc-chapter" data-target="chapter-4">
+            <a href="#chapter-4" class="toc-link chapter-link">
+                <span class="toc-badge">4</span>
+                <span class="toc-title">4. REAL-TIME AUDIO RECORDING SUITE</span>
+            </a>
+        </div>
+        <div class="toc-item toc-sec" data-target="section-4-1">
+            <a href="#section-4-1" class="toc-link sec-link">
+                <span class="toc-bullet">•</span>
+                <span class="toc-title">4.1 THE RECORD BUTTON (TRANSPORT / R KEY)</span>
+            </a>
+        </div>
+        <div class="toc-item toc-sec" data-target="section-4-2">
+            <a href="#section-4-2" class="toc-link sec-link">
+                <span class="toc-bullet">•</span>
+                <span class="toc-title">4.2 PRE RECORD COUNTDOWN</span>
+            </a>
+        </div>
+        <div class="toc-item toc-sec" data-target="section-4-3">
+            <a href="#section-4-3" class="toc-link sec-link">
+                <span class="toc-bullet">•</span>
+                <span class="toc-title">4.3 AUDIO RECORDING SETTINGS WINDOW</span>
+            </a>
+        </div>
+        <div class="toc-item toc-subsec" data-target="section-4-3-1">
+            <a href="#section-4-3-1" class="toc-link subsec-link">
+                <span class="toc-bullet">-</span>
+                <span class="toc-title">4.3.1 Audio Input Device &amp;amp; Quick Refresh</span>
+            </a>
+        </div>
+        <div class="toc-item toc-subsec" data-target="section-4-3-2">
+            <a href="#section-4-3-2" class="toc-link subsec-link">
+                <span class="toc-bullet">-</span>
+                <span class="toc-title">4.3.2 Live Input Signal Level VU Meter</span>
+            </a>
+        </div>
+        <div class="toc-item toc-subsec" data-target="section-4-3-3">
+            <a href="#section-4-3-3" class="toc-link subsec-link">
+                <span class="toc-bullet">-</span>
+                <span class="toc-title">4.3.3 Recordings Destination Folder</span>
+            </a>
+        </div>
+        <div class="toc-item toc-subsec" data-target="section-4-3-4">
+            <a href="#section-4-3-4" class="toc-link subsec-link">
+                <span class="toc-bullet">-</span>
+                <span class="toc-title">4.3.4 Broadcast Sample Rate</span>
+            </a>
+        </div>
+        <div class="toc-item toc-subsec" data-target="section-4-3-5">
+            <a href="#section-4-3-5" class="toc-link subsec-link">
+                <span class="toc-bullet">-</span>
+                <span class="toc-title">4.3.5 Headphone Input Monitoring</span>
+            </a>
+        </div>
+        <div class="toc-item toc-subsec" data-target="section-4-3-6">
+            <a href="#section-4-3-6" class="toc-link subsec-link">
+                <span class="toc-bullet">-</span>
+                <span class="toc-title">4.3.6 Multi-Track Recording Mode</span>
+            </a>
+        </div>
+        <div class="toc-item toc-chapter" data-target="chapter-5">
+            <a href="#chapter-5" class="toc-link chapter-link">
+                <span class="toc-badge">5</span>
+                <span class="toc-title">5. TIMELINE EDITING TOOLS SUITE</span>
+            </a>
+        </div>
+        <div class="toc-item toc-sec" data-target="section-5-1">
+            <a href="#section-5-1" class="toc-link sec-link">
+                <span class="toc-bullet">•</span>
+                <span class="toc-title">5.1 POINTER / SELECTION TOOL (V)</span>
+            </a>
+        </div>
+        <div class="toc-item toc-sec" data-target="section-5-2">
+            <a href="#section-5-2" class="toc-link sec-link">
+                <span class="toc-bullet">•</span>
+                <span class="toc-title">5.2 HAND TOOL (H)</span>
+            </a>
+        </div>
+        <div class="toc-item toc-sec" data-target="section-5-3">
+            <a href="#section-5-3" class="toc-link sec-link">
+                <span class="toc-bullet">•</span>
+                <span class="toc-title">5.3 RAZOR TOOL (K)</span>
+            </a>
+        </div>
+        <div class="toc-item toc-sec" data-target="section-5-4">
+            <a href="#section-5-4" class="toc-link sec-link">
+                <span class="toc-bullet">•</span>
+                <span class="toc-title">5.4 FADES TOOL (F)</span>
+            </a>
+        </div>
+        <div class="toc-item toc-sec" data-target="section-5-5">
+            <a href="#section-5-5" class="toc-link sec-link">
+                <span class="toc-bullet">•</span>
+                <span class="toc-title">5.5 TRIMMING TOOLS DROPDOWN (T)</span>
+            </a>
+        </div>
+        <div class="toc-item toc-subsec" data-target="section-5-5-1">
+            <a href="#section-5-5-1" class="toc-link subsec-link">
+                <span class="toc-bullet">-</span>
+                <span class="toc-title">5.5.1 Rolling Edit Tool</span>
+            </a>
+        </div>
+        <div class="toc-item toc-subsec" data-target="section-5-5-2">
+            <a href="#section-5-5-2" class="toc-link subsec-link">
+                <span class="toc-bullet">-</span>
+                <span class="toc-title">5.5.2 Slip Tool</span>
+            </a>
+        </div>
+        <div class="toc-item toc-subsec" data-target="section-5-5-3">
+            <a href="#section-5-5-3" class="toc-link subsec-link">
+                <span class="toc-bullet">-</span>
+                <span class="toc-title">5.5.3 Flex Trim / Time Stretch Tool</span>
+            </a>
+        </div>
+        <div class="toc-item toc-sec" data-target="section-5-6">
+            <a href="#section-5-6" class="toc-link sec-link">
+                <span class="toc-bullet">•</span>
+                <span class="toc-title">5.6 AUTOMATION MODE (A)</span>
+            </a>
+        </div>
+        <div class="toc-item toc-sec" data-target="section-5-7">
+            <a href="#section-5-7" class="toc-link sec-link">
+                <span class="toc-bullet">•</span>
+                <span class="toc-title">5.7 MAGNETIC GRID SNAPPING (S)</span>
+            </a>
+        </div>
+        <div class="toc-item toc-sec" data-target="section-5-8">
+            <a href="#section-5-8" class="toc-link sec-link">
+                <span class="toc-bullet">•</span>
+                <span class="toc-title">5.8 WAVEFORM / VISUAL ZOOM</span>
+            </a>
+        </div>
+        <div class="toc-item toc-chapter" data-target="chapter-6">
+            <a href="#chapter-6" class="toc-link chapter-link">
+                <span class="toc-badge">6</span>
+                <span class="toc-title">6. ACTION BUTTONS</span>
+            </a>
+        </div>
+        <div class="toc-item toc-sec" data-target="section-6-1">
+            <a href="#section-6-1" class="toc-link sec-link">
+                <span class="toc-bullet">•</span>
+                <span class="toc-title">6.1 IMPORT AUDIO FILE</span>
+            </a>
+        </div>
+        <div class="toc-item toc-sec" data-target="section-6-2">
+            <a href="#section-6-2" class="toc-link sec-link">
+                <span class="toc-bullet">•</span>
+                <span class="toc-title">6.2 ADD EMPTY TRACK LANE</span>
+            </a>
+        </div>
+        <div class="toc-item toc-sec" data-target="section-6-3">
+            <a href="#section-6-3" class="toc-link sec-link">
+                <span class="toc-bullet">•</span>
+                <span class="toc-title">6.3 DUPLICATE TRACK</span>
+            </a>
+        </div>
+        <div class="toc-item toc-sec" data-target="section-6-4">
+            <a href="#section-6-4" class="toc-link sec-link">
+                <span class="toc-bullet">•</span>
+                <span class="toc-title">6.4 STACK TRACK</span>
+            </a>
+        </div>
+        <div class="toc-item toc-sec" data-target="section-6-5">
+            <a href="#section-6-5" class="toc-link sec-link">
+                <span class="toc-bullet">•</span>
+                <span class="toc-title">6.5 PRECOMPOSE SELECTED TRACKS</span>
+            </a>
+        </div>
+        <div class="toc-item toc-chapter" data-target="chapter-7">
+            <a href="#chapter-7" class="toc-link chapter-link">
+                <span class="toc-badge">7</span>
+                <span class="toc-title">7. THE OPTIONS MENU</span>
+            </a>
+        </div>
+        <div class="toc-item toc-sec" data-target="section-7-1">
+            <a href="#section-7-1" class="toc-link sec-link">
+                <span class="toc-bullet">•</span>
+                <span class="toc-title">7.1 GLOBAL SELECTION</span>
+            </a>
+        </div>
+        <div class="toc-item toc-sec" data-target="section-7-2">
+            <a href="#section-7-2" class="toc-link sec-link">
+                <span class="toc-bullet">•</span>
+                <span class="toc-title">7.2 BOUNCE SELECTED TRACK...</span>
+            </a>
+        </div>
+        <div class="toc-item toc-sec" data-target="section-7-3">
+            <a href="#section-7-3" class="toc-link sec-link">
+                <span class="toc-bullet">•</span>
+                <span class="toc-title">7.3 BOUNCE SELECTED CLIPS...</span>
+            </a>
+        </div>
+        <div class="toc-item toc-sec" data-target="section-7-4">
+            <a href="#section-7-4" class="toc-link sec-link">
+                <span class="toc-bullet">•</span>
+                <span class="toc-title">7.4 PRECOMPOSE ENTIRE MIX</span>
+            </a>
+        </div>
+        <div class="toc-item toc-sec" data-target="section-7-5">
+            <a href="#section-7-5" class="toc-link sec-link">
+                <span class="toc-bullet">•</span>
+                <span class="toc-title">7.5 CLEAR ALL MARKERS</span>
+            </a>
+        </div>
+        <div class="toc-item toc-sec" data-target="section-7-6">
+            <a href="#section-7-6" class="toc-link sec-link">
+                <span class="toc-bullet">•</span>
+                <span class="toc-title">7.6 CLOSE ALL GAPS</span>
+            </a>
+        </div>
+        <div class="toc-item toc-sec" data-target="section-7-7">
+            <a href="#section-7-7" class="toc-link sec-link">
+                <span class="toc-bullet">•</span>
+                <span class="toc-title">7.7 JOIN THROUGH EDITS</span>
+            </a>
+        </div>
+        <div class="toc-item toc-sec" data-target="section-7-8">
+            <a href="#section-7-8" class="toc-link sec-link">
+                <span class="toc-bullet">•</span>
+                <span class="toc-title">7.8 ENABLE / DISABLE WORKING AREA</span>
+            </a>
+        </div>
+        <div class="toc-item toc-sec" data-target="section-7-9">
+            <a href="#section-7-9" class="toc-link sec-link">
+                <span class="toc-bullet">•</span>
+                <span class="toc-title">7.9 SHOW TOOLTIPS</span>
+            </a>
+        </div>
+        <div class="toc-item toc-sec" data-target="section-7-10">
+            <a href="#section-7-10" class="toc-link sec-link">
+                <span class="toc-bullet">•</span>
+                <span class="toc-title">7.10 DESTRUCTIVE OVERLAPPING VS. CROSSFADE OVERLAPPING</span>
+            </a>
+        </div>
+        <div class="toc-item toc-sec" data-target="section-7-11">
+            <a href="#section-7-11" class="toc-link sec-link">
+                <span class="toc-bullet">•</span>
+                <span class="toc-title">7.11 RECORDING SETTINGS</span>
+            </a>
+        </div>
+        <div class="toc-item toc-sec" data-target="section-7-12">
+            <a href="#section-7-12" class="toc-link sec-link">
+                <span class="toc-bullet">•</span>
+                <span class="toc-title">7.12 EDIT KEYBOARD SHORTCUTS</span>
+            </a>
+        </div>
+        <div class="toc-item toc-sec" data-target="section-7-13">
+            <a href="#section-7-13" class="toc-link sec-link">
+                <span class="toc-bullet">•</span>
+                <span class="toc-title">7.13 DELETE ALL TRACKS...</span>
+            </a>
+        </div>
+        <div class="toc-item toc-chapter" data-target="chapter-8">
+            <a href="#chapter-8" class="toc-link chapter-link">
+                <span class="toc-badge">8</span>
+                <span class="toc-title">8. KEYBOARD SHORTCUTS CUSTOMIZER</span>
+            </a>
+        </div>
+        <div class="toc-item toc-sec" data-target="section-8-1">
+            <a href="#section-8-1" class="toc-link sec-link">
+                <span class="toc-bullet">•</span>
+                <span class="toc-title">8.1 CUSTOMIZING YOUR KEYBINDINGS</span>
+            </a>
+        </div>
+        <div class="toc-item toc-sec" data-target="section-8-2">
+            <a href="#section-8-2" class="toc-link sec-link">
+                <span class="toc-bullet">•</span>
+                <span class="toc-title">8.2 RESETTING TO FACTORY DEFAULTS</span>
+            </a>
+        </div>
+        <div class="toc-item toc-chapter" data-target="chapter-9">
+            <a href="#chapter-9" class="toc-link chapter-link">
+                <span class="toc-badge">9</span>
+                <span class="toc-title">9. CLIP CONTEXT MENU (RIGHT-CLICK)</span>
+            </a>
+        </div>
+        <div class="toc-item toc-sec" data-target="section-9-1">
+            <a href="#section-9-1" class="toc-link sec-link">
+                <span class="toc-bullet">•</span>
+                <span class="toc-title">9.1 EDIT IN SAMPLER</span>
+            </a>
+        </div>
+        <div class="toc-item toc-sec" data-target="section-9-2">
+            <a href="#section-9-2" class="toc-link sec-link">
+                <span class="toc-bullet">•</span>
+                <span class="toc-title">9.2 CROSS FADE &amp;amp; REMOVE CROSSFADE (X)</span>
+            </a>
+        </div>
+        <div class="toc-item toc-sec" data-target="section-9-3">
+            <a href="#section-9-3" class="toc-link sec-link">
+                <span class="toc-bullet">•</span>
+                <span class="toc-title">9.3 MUTE / UNMUTE</span>
+            </a>
+        </div>
+        <div class="toc-item toc-sec" data-target="section-9-4">
+            <a href="#section-9-4" class="toc-link sec-link">
+                <span class="toc-bullet">•</span>
+                <span class="toc-title">9.4 CHANGE SPEED &amp;amp; NATIVE AE STRETCH LOGIC</span>
+            </a>
+        </div>
+        <div class="toc-item toc-sec" data-target="section-9-5">
+            <a href="#section-9-5" class="toc-link sec-link">
+                <span class="toc-bullet">•</span>
+                <span class="toc-title">9.5 REVERSE CLIP (REAL-TIME PLAYBACK INVERSION)</span>
+            </a>
+        </div>
+        <div class="toc-item toc-sec" data-target="section-9-6">
+            <a href="#section-9-6" class="toc-link sec-link">
+                <span class="toc-bullet">•</span>
+                <span class="toc-title">9.6 BOUNCE SELECTED CLIP</span>
+            </a>
+        </div>
+        <div class="toc-item toc-sec" data-target="section-9-7">
+            <a href="#section-9-7" class="toc-link sec-link">
+                <span class="toc-bullet">•</span>
+                <span class="toc-title">9.7 CUT, COPY, PASTE &amp;amp; DELETE</span>
+            </a>
+        </div>
+        <div class="toc-item toc-sec" data-target="section-9-8">
+            <a href="#section-9-8" class="toc-link sec-link">
+                <span class="toc-bullet">•</span>
+                <span class="toc-title">9.8 REPEAT MULTIPLE TIMES...</span>
+            </a>
+        </div>
+        <div class="toc-item toc-sec" data-target="section-9-9">
+            <a href="#section-9-9" class="toc-link sec-link">
+                <span class="toc-bullet">•</span>
+                <span class="toc-title">9.9 LOOP / UNLOOP CLIP</span>
+            </a>
+        </div>
+        <div class="toc-item toc-sec" data-target="section-9-10">
+            <a href="#section-9-10" class="toc-link sec-link">
+                <span class="toc-bullet">•</span>
+                <span class="toc-title">9.10 UNSTACK / UNFOLDER</span>
+            </a>
+        </div>
+        <div class="toc-item toc-sec" data-target="section-9-11">
+            <a href="#section-9-11" class="toc-link sec-link">
+                <span class="toc-bullet">•</span>
+                <span class="toc-title">9.11 MOVE SUBMENU</span>
+            </a>
+        </div>
+        <div class="toc-item toc-sec" data-target="section-9-12">
+            <a href="#section-9-12" class="toc-link sec-link">
+                <span class="toc-bullet">•</span>
+                <span class="toc-title">9.12 SMART SELECTION SUBMENU</span>
+            </a>
+        </div>
+        <div class="toc-item toc-sec" data-target="section-9-13">
+            <a href="#section-9-13" class="toc-link sec-link">
+                <span class="toc-bullet">•</span>
+                <span class="toc-title">9.13 RENAME CLIP</span>
+            </a>
+        </div>
+        <div class="toc-item toc-sec" data-target="section-9-14">
+            <a href="#section-9-14" class="toc-link sec-link">
+                <span class="toc-bullet">•</span>
+                <span class="toc-title">9.14 LABEL COLOR TAGGING (16 AFTER EFFECTS COLORS)</span>
+            </a>
+        </div>
+        <div class="toc-item toc-sec" data-target="section-9-15">
+            <a href="#section-9-15" class="toc-link sec-link">
+                <span class="toc-bullet">•</span>
+                <span class="toc-title">9.15 LOCK CLIP</span>
+            </a>
+        </div>
+        <div class="toc-item toc-sec" data-target="section-9-16">
+            <a href="#section-9-16" class="toc-link sec-link">
+                <span class="toc-bullet">•</span>
+                <span class="toc-title">9.16 GAP CONTEXT MENU (RIPPLE DELETE / DELETE GAP)</span>
+            </a>
+        </div>
+        <div class="toc-item toc-chapter" data-target="chapter-10">
+            <a href="#chapter-10" class="toc-link chapter-link">
+                <span class="toc-badge">10</span>
+                <span class="toc-title">10. AUDIO EFFECTS SUITE (CHANNEL STRIP FX)</span>
+            </a>
+        </div>
+        <div class="toc-item toc-sec" data-target="section-10-1">
+            <a href="#section-10-1" class="toc-link sec-link">
+                <span class="toc-bullet">•</span>
+                <span class="toc-title">10.1 HOW TO INSERT EFFECTS ON A TRACK</span>
+            </a>
+        </div>
+        <div class="toc-item toc-sec" data-target="section-10-2">
+            <a href="#section-10-2" class="toc-link sec-link">
+                <span class="toc-bullet">•</span>
+                <span class="toc-title">10.2 CORE ARCHITECTURAL RULE: MAXIMUM 1 INSTANCE PER EFFECT PER CHANNEL</span>
+            </a>
+        </div>
+        <div class="toc-item toc-sec" data-target="section-10-3">
+            <a href="#section-10-3" class="toc-link sec-link">
+                <span class="toc-bullet">•</span>
+                <span class="toc-title">10.3 COMPREHENSIVE GUIDE TO INCLUDED EFFECTS</span>
+            </a>
+        </div>
+        <div class="toc-item toc-subsec" data-target="section-10-3-1">
+            <a href="#section-10-3-1" class="toc-link subsec-link">
+                <span class="toc-bullet">-</span>
+                <span class="toc-title">10.3.1 Parametric EQ (3-Band Precision Equalizer)</span>
+            </a>
+        </div>
+        <div class="toc-item toc-subsec" data-target="section-10-3-2">
+            <a href="#section-10-3-2" class="toc-link subsec-link">
+                <span class="toc-bullet">-</span>
+                <span class="toc-title">10.3.2 Compressor (Dynamic Leveler)</span>
+            </a>
+        </div>
+        <div class="toc-item toc-subsec" data-target="section-10-3-3">
+            <a href="#section-10-3-3" class="toc-link subsec-link">
+                <span class="toc-bullet">-</span>
+                <span class="toc-title">10.3.3 Bass &amp;amp; Treble</span>
+            </a>
+        </div>
+        <div class="toc-item toc-subsec" data-target="section-10-3-4">
+            <a href="#section-10-3-4" class="toc-link subsec-link">
+                <span class="toc-bullet">-</span>
+                <span class="toc-title">10.3.4 Delay</span>
+            </a>
+        </div>
+        <div class="toc-item toc-subsec" data-target="section-10-3-5">
+            <a href="#section-10-3-5" class="toc-link subsec-link">
+                <span class="toc-bullet">-</span>
+                <span class="toc-title">10.3.5 Distortion</span>
+            </a>
+        </div>
+        <div class="toc-item toc-subsec" data-target="section-10-3-6">
+            <a href="#section-10-3-6" class="toc-link subsec-link">
+                <span class="toc-bullet">-</span>
+                <span class="toc-title">10.3.6 Flange &amp;amp; Chorus</span>
+            </a>
+        </div>
+        <div class="toc-item toc-subsec" data-target="section-10-3-7">
+            <a href="#section-10-3-7" class="toc-link subsec-link">
+                <span class="toc-bullet">-</span>
+                <span class="toc-title">10.3.7 Gate (Noise Gate)</span>
+            </a>
+        </div>
+        <div class="toc-item toc-subsec" data-target="section-10-3-8">
+            <a href="#section-10-3-8" class="toc-link subsec-link">
+                <span class="toc-bullet">-</span>
+                <span class="toc-title">10.3.8 High-Low Pass</span>
+            </a>
+        </div>
+        <div class="toc-item toc-subsec" data-target="section-10-3-9">
+            <a href="#section-10-3-9" class="toc-link subsec-link">
+                <span class="toc-bullet">-</span>
+                <span class="toc-title">10.3.9 Modulator</span>
+            </a>
+        </div>
+        <div class="toc-item toc-subsec" data-target="section-10-3-10">
+            <a href="#section-10-3-10" class="toc-link subsec-link">
+                <span class="toc-bullet">-</span>
+                <span class="toc-title">10.3.10 Reverb</span>
+            </a>
+        </div>
+        <div class="toc-item toc-subsec" data-target="section-10-3-11">
+            <a href="#section-10-3-11" class="toc-link subsec-link">
+                <span class="toc-bullet">-</span>
+                <span class="toc-title">10.3.11 Tone</span>
+            </a>
+        </div>
+        <div class="toc-item toc-sec" data-target="section-10-4">
+            <a href="#section-10-4" class="toc-link sec-link">
+                <span class="toc-bullet">•</span>
+                <span class="toc-title">10.4 BYPASS (ON/OFF) &amp;amp; EFFECT REMOVAL</span>
+            </a>
+        </div>
+        <div class="toc-item toc-chapter" data-target="chapter-11">
+            <a href="#chapter-11" class="toc-link chapter-link">
+                <span class="toc-badge">11</span>
+                <span class="toc-title">11. NON-DESTRUCTIVE CROSSFADES</span>
+            </a>
+        </div>
+        <div class="toc-item toc-sec" data-target="section-11-1">
+            <a href="#section-11-1" class="toc-link sec-link">
+                <span class="toc-bullet">•</span>
+                <span class="toc-title">11.1 NON-DESTRUCTIVE OVERLAPPING</span>
+            </a>
+        </div>
+        <div class="toc-item toc-sec" data-target="section-11-2">
+            <a href="#section-11-2" class="toc-link sec-link">
+                <span class="toc-bullet">•</span>
+                <span class="toc-title">11.2 APPLYING INSTANT CROSSFADES WITH THE X KEY</span>
+            </a>
+        </div>
+        <div class="toc-item toc-sec" data-target="section-11-3">
+            <a href="#section-11-3" class="toc-link sec-link">
+                <span class="toc-bullet">•</span>
+                <span class="toc-title">11.3 VISUAL TRANSITION LENGTH ADJUSTMENT</span>
+            </a>
+        </div>
+        <div class="toc-item toc-chapter" data-target="chapter-12">
+            <a href="#chapter-12" class="toc-link chapter-link">
+                <span class="toc-badge">12</span>
+                <span class="toc-title">12. FOLEY SAMPLER STUDIO &amp; SOUND DESIGN</span>
+            </a>
+        </div>
+        <div class="toc-item toc-sec" data-target="section-12-1">
+            <a href="#section-12-1" class="toc-link sec-link">
+                <span class="toc-bullet">•</span>
+                <span class="toc-title">12.1 ACCESSING SAMPLER MODE</span>
+            </a>
+        </div>
+        <div class="toc-item toc-sec" data-target="section-12-2">
+            <a href="#section-12-2" class="toc-link sec-link">
+                <span class="toc-bullet">•</span>
+                <span class="toc-title">12.2 LOADING AUDIO</span>
+            </a>
+        </div>
+        <div class="toc-item toc-sec" data-target="section-12-3">
+            <a href="#section-12-3" class="toc-link sec-link">
+                <span class="toc-bullet">•</span>
+                <span class="toc-title">12.3 MILLISECOND-ACCURATE IN &amp;amp; OUT POINTS</span>
+            </a>
+        </div>
+        <div class="toc-item toc-sec" data-target="section-12-4">
+            <a href="#section-12-4" class="toc-link sec-link">
+                <span class="toc-bullet">•</span>
+                <span class="toc-title">12.4 CREATIVE CONTROLS</span>
+            </a>
+        </div>
+        <div class="toc-item toc-sec" data-target="section-12-5">
+            <a href="#section-12-5" class="toc-link sec-link">
+                <span class="toc-bullet">•</span>
+                <span class="toc-title">12.5 SAVING TO YOUR PERMANENT SAMPLES LIBRARY</span>
+            </a>
+        </div>
+        <div class="toc-item toc-sec" data-target="section-12-6">
+            <a href="#section-12-6" class="toc-link sec-link">
+                <span class="toc-bullet">•</span>
+                <span class="toc-title">12.6 PLACING INTO TIMELINE</span>
+            </a>
+        </div>
+        <div class="toc-item toc-chapter" data-target="chapter-13">
+            <a href="#chapter-13" class="toc-link chapter-link">
+                <span class="toc-badge">13</span>
+                <span class="toc-title">13. STUDIO MODE (LIVE WEB AUDIO ENGINE)</span>
+            </a>
+        </div>
+        <div class="toc-item toc-sec" data-target="section-13-1">
+            <a href="#section-13-1" class="toc-link sec-link">
+                <span class="toc-bullet">•</span>
+                <span class="toc-title">13.1 WHAT IS STUDIO MODE?</span>
+            </a>
+        </div>
+        <div class="toc-item toc-chapter" data-target="chapter-14">
+            <a href="#chapter-14" class="toc-link chapter-link">
+                <span class="toc-badge">14</span>
+                <span class="toc-title">14. LICENSING, 10-DAY FREE TRIAL &amp; SUPPORT</span>
+            </a>
+        </div>
+        <div class="toc-item toc-sec" data-target="section-14-1">
+            <a href="#section-14-1" class="toc-link sec-link">
+                <span class="toc-bullet">•</span>
+                <span class="toc-title">14.1 10-DAY UNRESTRICTED FREE TRIAL</span>
+            </a>
+        </div>
+        <div class="toc-item toc-sec" data-target="section-14-2">
+            <a href="#section-14-2" class="toc-link sec-link">
+                <span class="toc-bullet">•</span>
+                <span class="toc-title">14.2 ACTIVATING YOUR COMMERCIAL LICENSE KEY</span>
+            </a>
+        </div>
+        <div class="toc-item toc-sec" data-target="section-14-3">
+            <a href="#section-14-3" class="toc-link sec-link">
+                <span class="toc-bullet">•</span>
+                <span class="toc-title">14.3 BUILT-IN IN-APP SUPPORT HUB &amp;amp; RECOVERY</span>
+            </a>
+        </div>
+        <div class="toc-item toc-sec" data-target="section-14-4">
+            <a href="#section-14-4" class="toc-link sec-link">
+                <span class="toc-bullet">•</span>
+                <span class="toc-title">14.4 SOFTWARE UPDATES</span>
+            </a>
+        </div>
+        <div class="toc-item toc-chapter" data-target="chapter-15">
+            <a href="#chapter-15" class="toc-link chapter-link">
+                <span class="toc-badge">15</span>
+                <span class="toc-title">15. APPENDIX: MASTER KEYBOARD SHORTCUTS REFERENCE TABLE</span>
+            </a>
+        </div>
+        <div class="toc-item toc-sec" data-target="section-15-1">
+            <a href="#section-15-1" class="toc-link sec-link">
+                <span class="toc-bullet">•</span>
+                <span class="toc-title">15.1 NAVIGATION &amp;amp; TRANSPORT KEYBINDINGS</span>
+            </a>
+        </div>
+        <div class="toc-item toc-sec" data-target="section-15-2">
+            <a href="#section-15-2" class="toc-link sec-link">
+                <span class="toc-bullet">•</span>
+                <span class="toc-title">15.2 EDITING TOOL SHORTCUTS</span>
+            </a>
+        </div>
+        <div class="toc-item toc-sec" data-target="section-15-3">
+            <a href="#section-15-3" class="toc-link sec-link">
+                <span class="toc-bullet">•</span>
+                <span class="toc-title">15.3 CLIP MANIPULATION &amp;amp; TRACK COMMANDS</span>
+            </a>
+        </div>
+            </nav>
+        </aside>
+
+        <!-- Main Document Body -->
+        <main class="manual-main">
+            <div class="manual-container">
+                <!-- Hero Header -->
+                <header class="doc-hero">
+                    <div class="hero-logo-row">
+                        <img src="Pics/MIXTOR_LOGO.svg" alt="Mixtor Logo" class="hero-logo-img">
+                        <span class="hero-version-pill">VERSION 1.0</span>
+                    </div>
+                    <h1 class="hero-title">Mixtor Audio Editor</h1>
+                    <p class="hero-subtitle">The first complete, fast, and intuitive digital audio workstation (DAW) embedded natively inside Adobe After Effects.</p>
+                    
+                    <div class="hero-credits">
+                        <p>Created by Pedro Justiniano - RojusScripts</p>
+                        <p>With special thanks to my friend Daian Gan</p>
+                        <p>Compatibility: Adobe After Effects 2022 to 2026+ (macOS &amp; Windows)</p>
+                        <p>Copyright &copy; 2026 RojusScripts. All Rights Reserved.</p>
+                        <p><a href="https://www.rojusscripts.com" target="_blank">www.rojusscripts.com</a></p>
+                    </div>
+                </header>
+
+                <!-- Document Chapters -->
+                
+        <section id="chapter-1" class="manual-chapter">
+            <h2 class="chapter-heading">1. WELCOME & 1-CLICK NATIVE INSTALLATION</h2>
+            
+        
+
+            <div id="section-1-1" class="manual-subsection">
+                <h3 class="subsection-heading">1.1 WHAT IS MIXTOR?</h3>
+                
+            </div>
+        
+<p class="manual-p">Mixtor is the first complete, fast, and intuitive digital audio workstation (DAW) built specifically to live inside Adobe After Effects.</p>
+<p class="manual-p">If you are a motion designer, video editor, or compositor, you know the historic frustration of working with audio inside After Effects: the lack of a proper blade tool, clumsy keyframing, no visual fade handles, and sluggish RAM-preview waits just to check if an edit hits on the right frame; in short, you simply don’t do audio inside After Effects.</p>
+<p class="manual-p">Well, now Mixtor turns After Effects into a cutting-edge sound studio. It gives you razor-sharp cut tools (C), instant visual fades (F), multi-node volume and pan automation curves (A), visual UIs for effects (EQ, Compression, Reverb, Delay), and an integrated Foley Sampler to design and drop sound effects easier than ever.</p>
+<p class="manual-p"><b><i>(Mixtor is not a standalone DAW so it will relay on what AE is capable to do, </i></b><b><i>making the most of its native capabilities).</i></b><b></b></p>
+
+            <div id="section-1-2" class="manual-subsection">
+                <h3 class="subsection-heading">1.2 MacOS INSTALLATION (.PKG 1-CLICK INSTALLER)</h3>
+                
+            </div>
+        
+<p class="manual-p">Installation on MacOS is 100% native, signed, and automatic:</p>
+
+        <div class="manual-step">
+            <span class="step-num">1.</span>
+            <div class="step-content">Download the official Mixtor.zip.</div>
+        </div>
+
+        <div class="manual-step">
+            <span class="step-num">2.</span>
+            <div class="step-content">Inside you will find the <b>Mixtor_Installer.pkg </b>installer. Double-click on it.</div>
+        </div>
+
+        <div class="manual-step">
+            <span class="step-num">3.</span>
+            <div class="step-content">The standard MacOS installer window will guide you: click "Continue", then "Install". When prompted, enter your Mac password.</div>
+        </div>
+
+        <div class="manual-step">
+            <span class="step-num">4.</span>
+            <div class="step-content">Within seconds, you will see: "The installation was successful".</div>
+        </div>
+
+        <div class="manual-step">
+            <span class="step-num">5.</span>
+            <div class="step-content">That is it! Mixtor is cleanly installed in your Adobe CEP directory.</div>
+        </div>
+
+            <div id="section-1-3" class="manual-subsection">
+                <h3 class="subsection-heading">1.3 WINDOWS INSTALLATION (.EXE 1-CLICK INSTALLER)</h3>
+                
+            </div>
+        
+<p class="manual-p">Installation on Windows 10 and Windows 11 is equally simple and fully automated.</p>
+<p class="manual-p">Steps:</p>
+
+        <div class="manual-step">
+            <span class="step-num">1.</span>
+            <div class="step-content">Download the official Mixtor.zip for Windows.</div>
+        </div>
+
+        <div class="manual-step">
+            <span class="step-num">2.</span>
+            <div class="step-content">Inside you will find the <b>Mixtor_Installer.exe </b>installer. Double-click on it.</div>
+        </div>
+
+        <div class="manual-step">
+            <span class="step-num">3.</span>
+            <div class="step-content">If Windows SmartScreen displays an informational prompt, click "More info" and then "Run anyway".</div>
+        </div>
+
+        <div class="manual-step">
+            <span class="step-num">4.</span>
+            <div class="step-content">Follow the setup wizard by clicking "Next", then "Install".</div>
+        </div>
+
+        <div class="manual-step">
+            <span class="step-num">5.</span>
+            <div class="step-content">When finished, click "Finish".</div>
+        </div>
+
+            <div id="section-1-4" class="manual-subsection">
+                <h3 class="subsection-heading">1.4 HOW TO OPEN MIXTOR.</h3>
+                
+            </div>
+        
+
+        <div class="manual-step">
+            <span class="step-num">1.</span>
+            <div class="step-content">Launch Adobe After Effects (versions 2022, 2023, 2024, 2025, or 2026+).</div>
+        </div>
+
+        <div class="manual-step">
+            <span class="step-num">2.</span>
+            <div class="step-content">In the top After Effects menu bar, navigate to: <b>Window &gt; Extensions &gt; Mixtor Audio Editor.</b></div>
+        </div>
+
+        <div class="manual-step">
+            <span class="step-num">3.</span>
+            <div class="step-content">The Mixtor panel will open. You can dock it anywhere in your After Effects workspace by dragging its tab, just like you would dock the Timeline, Effects Controls, or Composition panels, preferably prioritizing its horizontal extent.</div>
+        </div>
+
+            <div id="section-1-5" class="manual-subsection">
+                <h3 class="subsection-heading">1.5 PERMISSIONS</h3>
+                
+            </div>
+        
+<p class="manual-p">Go to After <b>Effects &gt; Settings &gt; Scripting &amp; Expressions</b> and make sure that the Allow Scripts to Write Files and Access Network check box is toggled on.</p>
+
+            <div id="section-1-6" class="manual-subsection">
+                <h3 class="subsection-heading">1.6 OPERATING SYSTEM MICROPHONE PERMISSIONS</h3>
+                
+            </div>
+        
+<p class="manual-p">If you plan to use Mixtor's real-time voiceover or Foley recording features:</p>
+<p class="manual-p">- On macOS: The first time you press the Record button (R), macOS will display a security dialog asking to allow After Effects to access your microphone. Click "Allow". If you ever denied it in the past, open System Settings &gt; Privacy &amp; Security &gt; Microphone and ensure Adobe After Effects is enabled.</p>
+<p class="manual-p">- On Windows: Open Windows Settings &gt; Privacy &gt; Microphone and confirm that desktop apps have permission to access your audio hardware.</p>
+
+        <section id="chapter-2" class="manual-chapter">
+            <h2 class="chapter-heading">2. QUICK START</h2>
+            
+        
+
+            <div id="section-2-1" class="manual-subsection">
+                <h3 class="subsection-heading">2.1 THE GOLDEN RULE: AN ACTIVE COMPOSITION MUST BE OPEN &amp; SELECTED</h3>
+                
+            <figure class="manual-figure">
+                <img src="Pics/MIXTOR EMPTY WELCOME PANEL.png" alt="Mixtor Empty Welcome Panel — Active Composition Required" loading="lazy">
+                <figcaption>Mixtor Empty Welcome Panel — Active Composition Required</figcaption>
+            </figure>
+            </div>
+        
+<p class="manual-p">Mixtor works in real-time bidirectional synchronization with After Effects. To draw waveforms, calculate time, and create audio tracks, Mixtor REQUIRES that you have a composition open and active in your project.</p>
+<p class="manual-p">- If no composition is open, Mixtor's header will display "— No Comp —" and the timeline will wait in standby mode.</p>
+<p class="manual-p">- As soon as you open or click into a composition, Mixtor instantly detects its name, duration, and frame rate (FPS), aligning its timecode ruler seamlessly.</p>
+
+            <div id="section-2-2" class="manual-subsection">
+                <h3 class="subsection-heading">2.2 IMPORTING AUDIO: DRAG &amp; DROP SIMPLICITY</h3>
+                
+            </div>
+        
+<p class="manual-p">Starting a project is as fluid as modern video editing: You can drag and drop your audio files from your project’s panel onto Mixtor's multitrack timeline area or directly from the Finder or Windows File Explorer. Mixtor automatically creates the required audio tracks, generates visual waveforms, and places the clips where you dropped them.</p>
+<p class="manual-p">Alternatively, you can click the <b>Import</b> folder icon in the top toolbar to browse for audio files using your operating system's file chooser.</p>
+
+            <div id="section-2-3" class="manual-subsection">
+                <h3 class="subsection-heading">2.3 AUTOMATIC DETECTION OF EXISTING AUDIO LAYERS</h3>
+                
+            </div>
+        
+<p class="manual-p">If you open an existing composition that already has audio layers or video files with embedded sound tracks, Mixtor automatically scans the active composition and maps each audio layer to a dedicated track lane. Any cuts, level changes, or volume automations made in Mixtor reflect directly on After Effects layers.</p>
+
+            <div id="section-2-4" class="manual-subsection">
+                <h3 class="subsection-heading">2.4 LOCK TO COMPOSITION ("LOCK TO COMP")</h3>
+                
+            </div>
+        
+<p class="manual-p">In complex motion design projects featuring dozens of nested precomps, clicking</p>
+<p class="manual-p">a graphic layer can cause After Effects to switch the active view. To prevent Mixtor from accidentally switching compositions while you are mixing sound: there is a <b>Lock to Comp</b> button in the top right header, toggled on by default.</p>
+<p class="manual-p">When highlighted, Mixtor stays permanently locked to your selected composition, allowing you to navigate and edit visual precomps freely without losing your audio mix focus.</p>
+<p class="manual-p">Click it again whenever you want to switch Mixtor to a different composition.</p>
+<p class="manual-p"><b><i>WARNING</i></b></p>
+<p class="manual-p"><b><i> When Mixtor is linked to a composition it will create a new hidden Null object responsible for handling the Master volume for your mix. It will also create new Null objects for every new audio track. So if you turn off your global Shy button and find all those Null objects pelase do not move them, manipulate them directly, lock them or delete them. Simply leave them alone and everything will be fine.</i></b><b></b></p>
+
+        <section id="chapter-3" class="manual-chapter">
+            <h2 class="chapter-heading">3. FULL INTERFACE TOUR</h2>
+            
+            <figure class="manual-figure">
+                <img src="Pics/Mixtor Populated Panel.png" alt="Mixtor Audio Editor — Full Populated Interface Overview" loading="lazy">
+                <figcaption>Mixtor Audio Editor — Full Populated Interface Overview</figcaption>
+            </figure>
+        
+<p class="manual-p">Mixtor's interface has been crafted for clean readability, eliminating visual clutter while putting critical audio controls at your fingertips:</p>
+
+            <div id="section-3-1" class="manual-subsection">
+                <h3 class="subsection-heading">3.1 TOP HEADER TOOLBAR</h3>
+                
+            <figure class="manual-figure">
+                <img src="Pics/Tools section.png" alt="Top Header Toolbar & Tool Palette" loading="lazy">
+                <figcaption>Top Header Toolbar & Tool Palette</figcaption>
+            </figure>
+            </div>
+        
+<p class="manual-p">From left to right, the header provides:</p>
+<p class="manual-p">- Transport Controls: Go to Beginning, Play/Pause, and Record Audio.</p>
+<p class="manual-p">-Timecode Display: Real-time playhead position in standard Hours:Minutes:Seconds:Frames format (0:00:00:00).</p>
+<p class="manual-p">- Options Menu (...): Global project-level utility and maintenance tools.</p>
+<p class="manual-p">- Editing Toolbox: Pointer (V), Hand (H), Fades (F), Trim Suite (Rolling Edit / Slip / Flex Trim), Automation Mode (A), and Grid Snapping (S).</p>
+<p class="manual-p">- Waveform Toggle &amp; Waveform Zoom (Ctrl / Right + Click).</p>
+<p class="manual-p">- Active Composition Name Display.</p>
+<p class="manual-p">- Action Buttons: Import Audio, Add Empty Track Lane, Duplicate Track, Stack Tracks (Folder), and Precompose Selected Tracks.</p>
+<p class="manual-p">- Mode Selectors: Lock to Comp, Studio Mode, Sampler Mode, and Help Dialog.</p>
+
+            <div id="section-3-2" class="manual-subsection">
+                <h3 class="subsection-heading">3.2 TRANSPORT CONTROLS &amp; TIMECODE DISPLAY</h3>
+                
+            <figure class="manual-figure">
+                <img src="Pics/Transport buttons.png" alt="Transport Control Buttons (Play, Pause, Return to Zero)" loading="lazy">
+                <figcaption>Transport Control Buttons (Play, Pause, Return to Zero)</figcaption>
+            </figure>
+            <figure class="manual-figure">
+                <img src="Pics/Timecode.png" alt="High-Precision SMPTE Timecode Display" loading="lazy">
+                <figcaption>High-Precision SMPTE Timecode Display</figcaption>
+            </figure>
+            </div>
+        
+<p class="manual-p">- Go to Beginning (Prev): Snaps the playhead instantly to frame 0.</p>
+<p class="manual-p">- Play / Pause: Starts or stops audio playback, synchronized with the Spacebar.</p>
+<p class="manual-p">- Record (R): Launches live microphone recording (detailed in Section 4).</p>
+
+            <div id="section-3-3" class="manual-subsection">
+                <h3 class="subsection-heading">3.3 TRACK HEADERS &amp; CHANNEL STRIPS</h3>
+                
+            <figure class="manual-figure">
+                <img src="Pics/Track Header Options.png" alt="Track Headers, Channel Controls & Options" loading="lazy">
+                <figcaption>Track Headers, Channel Controls & Options</figcaption>
+            </figure>
+            </div>
+        
+<p class="manual-p">To the left of each timeline lane sits the channel strip header:</p>
+<p class="manual-p">- Track Name: Double-click to rename any track (e.g., "Dialog", "Music", "SFX").</p>
+<p class="manual-p">- Mute (M): Instantly silences the track.</p>
+<p class="manual-p">- Solo (S): Isolates the track, silencing all other tracks in the mix.</p>
+<p class="manual-p">- Record Arm: Sets the track as the target destination for incoming audio.</p>
+<p class="manual-p">- Volume Fader: Precision horizontal slider ranging from -48 dB to +12 dB. Double-click the fader slider to reset it to exactly 0.0 dB unity gain.</p>
+<p class="manual-p">- Stereo Pan Knob: Rotary dial to pan audio between Left and Right. Alt + Click to reset. (If there are automation nodes the Pan Knob will be blocked)</p>
+<p class="manual-p">- Effects Rack (+ FX): Dropdown to insert native AE audio effects.</p>
+<p class="manual-p">- Applied Effects Badges: Visual badges showing active plugins; click any badge to open its dedicated parameter editor.</p>
+<p class="manual-p"><b><i> (Due to limitations on the Mixtor’s architecture vs the way AE handles the audio effects, you can add only one instance of each effect per channel; so if you need to add another one you should do it directly to the audio layer)</i></b><b></b></p>
+
+            <div id="section-3-4" class="manual-subsection">
+                <h3 class="subsection-heading">3.4 MASTER TRACK &amp; OUTPUT FADER</h3>
+                
+            </div>
+        
+<p class="manual-p">Located at the top left above individual track headers, controls the overall output gain for the entire composition mix. It also features a Master Volume Automation Lane, allowing global fade-ins and fade-outs across the whole project.</p>
+
+            <div id="section-3-5" class="manual-subsection">
+                <h3 class="subsection-heading">3.5 MULTITRACK TIMELINE CANVAS &amp; PLAYHEAD</h3>
+                
+            </div>
+        
+<p class="manual-p">The central creative canvas:</p>
+<p class="manual-p">- Timecode Ruler: Displays seconds, sub-seconds, and frames. Click or scrub along the ruler to move the playhead smoothly. You can also turn on audio scrub by dragging the playhead while pressing Control or Command (just like in the regular timeline).</p>
+<p class="manual-p">- Playhead Line: High-visibility playhead indicating the exact acoustic position.</p>
+<p class="manual-p">- Track Lanes: Horizontal rows hosting audio clips.</p>
+<p class="manual-p">- Audio Clips: Colorful, high-contrast blocks displaying acoustic waveform peaks, clip names, current gain, and interactive fade and trim handles.</p>
+
+            <div id="section-3-6" class="manual-subsection">
+                <h3 class="subsection-heading">3.6 SCROLLBARS &amp; NAVIGATION ZOOM CONTROLS</h3>
+                
+            </div>
+        
+<p class="manual-p">- Horizontal Zoom: Press J to zoom in and G to zoom out centered on your cursor, or drag the blue dots on the bottom scroll bar.</p>
+<p class="manual-p">- Horizontal Scrubbing: Drag the bottom scrollbar or use the Hand Tool (H); you can also use the mouse wheel while pressing Shift.</p>
+<p class="manual-p">- Vertical Zoom: Drag the blue dots on the left side scroll bar to expand or collapse track heights to view expansive waveforms or condense dozens of lanes into a compact mixer view.</p>
+
+        <section id="chapter-4" class="manual-chapter">
+            <h2 class="chapter-heading">4. REAL-TIME AUDIO RECORDING SUITE</h2>
+            
+        
+<p class="manual-p">Mixtor incorporates a professional audio capture engine, ideal for Foley and even voiceovers recording directly into your comp.</p>
+
+            <div id="section-4-1" class="manual-subsection">
+                <h3 class="subsection-heading">4.1 THE RECORD BUTTON (TRANSPORT / R KEY)</h3>
+                
+            </div>
+        
+<p class="manual-p">Before start recording make sure you hava a track selected and armed. Simply select your desired track and arm it by clicking on the little red dot button in your track header.</p>
+<p class="manual-p">In the top transport section, locate the red circular <b>Record</b> button. Clicking itimmediately begins audio capture from the current playhead position. Press <b>Record </b>again or hit the Spacebar to stop.</p>
+<p class="manual-p">The recorded audio appears instantly on your timeline as an uncompressed, high-fidelity broadcast .wav clip.</p>
+<p class="manual-p">Right-Click the Record Button: Instantly opens the Audio Recording Settings window.</p>
+<p class="manual-p"><b><i> (The recorded tracks will be stored as clips in a dedicated folder in your project panel, and in your disk besides your project).</i></b><b></b></p>
+
+            <div id="section-4-2" class="manual-subsection">
+                <h3 class="subsection-heading">4.2 PRE RECORD COUNTDOWN</h3>
+                
+            </div>
+        
+<p class="manual-p">Starting to speak the millisecond you hit record can feel rushed. Mixtor solves this with an intelligent Pre Record Count system: When enabled, pressing Record triggers a flashing red badge: "REC IN: 2.0s" (or your chosen countdown duration) and then start recording. You can change the preferred time in the Audio Recording Settings sections, by right-clickng on the Rec button.</p>
+
+            <div id="section-4-3" class="manual-subsection">
+                <h3 class="subsection-heading">4.3 AUDIO RECORDING SETTINGS WINDOW</h3>
+                
+            <figure class="manual-figure">
+                <img src="Pics/Audio Recording Settings.png" alt="Audio Recording Settings & Configuration Window" loading="lazy">
+                <figcaption>Audio Recording Settings & Configuration Window</figcaption>
+            </figure>
+            </div>
+        
+<p class="manual-p">Open this dialog by right-clicking the Record button or navigating to the Options</p>
+<p class="manual-p">Menu (...) &gt; "Recording Settings":</p>
+
+            <div id="section-4-3-1" class="manual-sub-subsection">
+                <h4 class="sub-subsection-heading">4.3.1 Audio Input Device &amp; Quick Refresh</h4>
+                
+            </div>
+        
+<p class="manual-p">- Select your preferred audio interface or built-in laptop mic.</p>
+<p class="manual-p">- Refresh Button (↻ Refresh): Plugged in your mic after opening After Effects?</p>
+<p class="manual-p">Click Refresh to detect new hardware immediately without restarting.</p>
+<p class="manual-p">You can then select the desired input channel, depending on what is available on your audio interface.</p>
+
+            <div id="section-4-3-2" class="manual-sub-subsection">
+                <h4 class="sub-subsection-heading">4.3.2 Live Input Signal Level VU Meter</h4>
+                
+            </div>
+        
+<p class="manual-p">- A responsive dB meter displaying incoming audio levels before you record.</p>
+<p class="manual-p">- Test your mic: speak at your natural volume and ensure the bar bounces inside the green and yellow zones, avoiding the red ceiling.</p>
+
+            <div id="section-4-3-3" class="manual-sub-subsection">
+                <h4 class="sub-subsection-heading">4.3.3 Recordings Destination Folder</h4>
+                
+            </div>
+        
+<p class="manual-p">- Displays the exact file system directory where captured `.wav` files are saved.</p>
+<p class="manual-p">- "Browse...": Choose a project-specific recordings folder on your drive.</p>
+<p class="manual-p">- Folder Icon: Opens the destination directory in macOS Finder or Windows Explorer.</p>
+
+            <div id="section-4-3-4" class="manual-sub-subsection">
+                <h4 class="sub-subsection-heading">4.3.4 Broadcast Sample Rate</h4>
+                
+            </div>
+        
+<p class="manual-p">Mixtor records at the default’s 48,000 Hz (48 kHz / 24-bit PCM) project sample rate. To change it you have to do it through the project’s settings, since AE does not allow changing the sample rate via scripts or extensions.</p>
+
+            <div id="section-4-3-5" class="manual-sub-subsection">
+                <h4 class="sub-subsection-heading">4.3.5 Headphone Input Monitoring</h4>
+                
+            </div>
+        
+<p class="manual-p">When enabled, you hear your live microphone feed through your speakers or headphones in real time.</p>
+<p class="manual-p"><b><i>(Remember to keep your mic far from your speakers and avoid to point directly to them to prevent feedback loops… or just use headphones).</i></b><b></b></p>
+
+            <div id="section-4-3-6" class="manual-sub-subsection">
+                <h4 class="sub-subsection-heading">4.3.6 Multi-Track Recording Mode</h4>
+                
+            </div>
+        
+<p class="manual-p">When toggled on, Mixtor allows recording multiple armed tracks simultaneously when using multi-channel audio hardware.</p>
+
+        <section id="chapter-5" class="manual-chapter">
+            <h2 class="chapter-heading">5. TIMELINE EDITING TOOLS SUITE</h2>
+            
+        
+<p class="manual-p">Mixtor features an agile, modern editing toolbox designed to match professional creative workflows:</p>
+
+            <div id="section-5-1" class="manual-subsection">
+                <h3 class="subsection-heading">5.1 POINTER / SELECTION TOOL (V)</h3>
+                
+            <figure class="manual-figure">
+                <img src="Pics/Pointer tool.png" alt="Pointer / Selection Tool (V)" loading="lazy">
+                <figcaption>Pointer / Selection Tool (V)</figcaption>
+            </figure>
+            </div>
+        
+<p class="manual-p">Your everyday tool. Click to select clips or drag a marquee box across multiple clips. Drag clips horizontally to adjust timing, or vertically to move them across tracks. <b>Alt + Drag</b> to clone your clips. Hover near the bottom-left or bottom-right edges of any clip: the cursor transforms into trim arrows, allowing you to lengthen or shorten the clip boundaries non-destructively.</p>
+
+            <div id="section-5-2" class="manual-subsection">
+                <h3 class="subsection-heading">5.2 HAND TOOL (H)</h3>
+                
+            <figure class="manual-figure">
+                <img src="Pics/Hand tool.png" alt="Hand Navigation Tool (H)" loading="lazy">
+                <figcaption>Hand Navigation Tool (H)</figcaption>
+            </figure>
+            </div>
+        
+<p class="manual-p">Click and drag anywhere on the timeline to pan smoothly across long projects without risk of moving clips by accident. Just like in AE.</p>
+
+            <div id="section-5-3" class="manual-subsection">
+                <h3 class="subsection-heading">5.3 RAZOR TOOL (K)</h3>
+                
+            <figure class="manual-figure">
+                <img src="Pics/Razor tool.png" alt="Razor / Split Tool (C / K)" loading="lazy">
+                <figcaption>Razor / Split Tool (C / K)</figcaption>
+            </figure>
+            </div>
+        
+<p class="manual-p">The classic razor blade tool: click anywhere on an audio clip to split it cleanly into two independent clips. When clips are selected under the playhead, press C on your keyboad to perform a surgical cut exactly at the playhead line.</p>
+
+            <div id="section-5-4" class="manual-subsection">
+                <h3 class="subsection-heading">5.4 FADES TOOL (F)</h3>
+                
+            <figure class="manual-figure">
+                <img src="Pics/Fades tool.png" alt="Interactive Fades Tool (F)" loading="lazy">
+                <figcaption>Interactive Fades Tool (F)</figcaption>
+            </figure>
+            </div>
+        
+<p class="manual-p">Activating the Fades Tool reveals bright fade handles in the top corners of every clip. Drag the left handle inward to create a smooth Fade-In. Drag the right handle inward to create a smooth Fade-Out.</p>
+
+            <div id="section-5-5" class="manual-subsection">
+                <h3 class="subsection-heading">5.5 TRIMMING TOOLS DROPDOWN (T)</h3>
+                
+            <figure class="manual-figure">
+                <img src="Pics/Trimming Tools Dropdown.png" alt="Advanced Trimming Tools Palette" loading="lazy">
+                <figcaption>Advanced Trimming Tools Palette</figcaption>
+            </figure>
+            </div>
+        
+<p class="manual-p">Located next to the Fades Tool, this dropdown houses three trimming tools, that you can either select by clicking and holding until the dropdown opens, or clicking on the button until the right trimming tool appears, or simply hit on T to switch between the three tools:</p>
+
+            <div id="section-5-5-1" class="manual-sub-subsection">
+                <h4 class="sub-subsection-heading">5.5.1 Rolling Edit Tool</h4>
+                
+            <figure class="manual-figure">
+                <img src="Pics/Rolling edit tool.png" alt="Rolling Edit Tool (T)" loading="lazy">
+                <figcaption>Rolling Edit Tool (T)</figcaption>
+            </figure>
+            </div>
+        
+<p class="manual-p">Place your cursor on the cut boundary between two adjacent clips. Dragging rolls the cut point: it lengthens one clip while simultaneously shortening the other by the exact same amount, keeping total timeline duration unchanged.</p>
+
+            <div id="section-5-5-2" class="manual-sub-subsection">
+                <h4 class="sub-subsection-heading">5.5.2 Slip Tool</h4>
+                
+            <figure class="manual-figure">
+                <img src="Pics/Slip Tool.png" alt="Slip Tool" loading="lazy">
+                <figcaption>Slip Tool</figcaption>
+            </figure>
+            </div>
+        
+<p class="manual-p">Shifts the underlying audio content inside a clip while keeping its in-point, out-point, and timeline duration completely fixed. Essential for syncing a punch sound effect or a vocal phrase to on-screen video action without disturbing surrounding clips.</p>
+
+            <div id="section-5-5-3" class="manual-sub-subsection">
+                <h4 class="sub-subsection-heading">5.5.3 Flex Trim / Time Stretch Tool</h4>
+                
+            <figure class="manual-figure">
+                <img src="Pics/Flex Trim Tool_00006.png" alt="Flex Trim / Time Stretch Tool" loading="lazy">
+                <figcaption>Flex Trim / Time Stretch Tool</figcaption>
+            </figure>
+            </div>
+        
+<p class="manual-p">Drag the boundary of an audio clip to stretch or compress its duration visually on the timeline. Mixtor automatically recalculates the playback speed in After Effects, letting you stretch a whoosh or riser to hit an exact visual milestone.</p>
+
+            <div id="section-5-6" class="manual-subsection">
+                <h3 class="subsection-heading">5.6 AUTOMATION MODE (A)</h3>
+                
+            <figure class="manual-figure">
+                <img src="Pics/Automation mode.png" alt="Automation Mode Toggle Button (A)" loading="lazy">
+                <figcaption>Automation Mode Toggle Button (A)</figcaption>
+            </figure>
+            <figure class="manual-figure">
+                <img src="Pics/Panel With Automations.png" alt="Visual Automation Envelopes & Bezier Curves in Timeline" loading="lazy">
+                <figcaption>Visual Automation Envelopes & Bezier Curves in Timeline</figcaption>
+            </figure>
+            </div>
+        
+<p class="manual-p">Automation Mode, displays volume and pan envelope lines across all clips and tracks. Click anywhere on the line to add control nodes (keyframe points). Drag nodes up or down on the green line to automate volume changes over time, or to automate panning on the orange line.</p>
+<p class="manual-p">Right click on a selected node to add <b>Ease</b> or <b>Delete</b> it. You can reset automations by selecting one of the functions in the track options of the track’s playhead: <b>Reset Volume Automations</b>,<b> Reset Pan Automations </b>or<b> Reset all automations</b>.</p>
+
+            <div id="section-5-7" class="manual-subsection">
+                <h3 class="subsection-heading">5.7 MAGNETIC GRID SNAPPING (S)</h3>
+                
+            <figure class="manual-figure">
+                <img src="Pics/Snap to grid.png" alt="Magnetic Grid Snapping Toggle (S)" loading="lazy">
+                <figcaption>Magnetic Grid Snapping Toggle (S)</figcaption>
+            </figure>
+            </div>
+        
+<p class="manual-p">Toggles magnetic snapping on or off. When active, dragged clips snap with sub-frame precision to the boundaries of adjacent clips, the playhead line, project markers, and ruler grid marks.</p>
+
+            <div id="section-5-8" class="manual-subsection">
+                <h3 class="subsection-heading">5.8 WAVEFORM / VISUAL ZOOM</h3>
+                
+            <figure class="manual-figure">
+                <img src="Pics/Waves toggle.png" alt="Waveform Display Toggle (Waves)" loading="lazy">
+                <figcaption>Waveform Display Toggle (Waves)</figcaption>
+            </figure>
+            <figure class="manual-figure">
+                <img src="Pics/Wave Zoom.png" alt="Waveform Amplitude Zoom Slider" loading="lazy">
+                <figcaption>Waveform Amplitude Zoom Slider</figcaption>
+            </figure>
+            </div>
+        
+<p class="manual-p">Click the Waveform button in the top toolbar to toggle waveforms on or off for maximum rendering speed in massive projects.</p>
+<p class="manual-p"><b>Right-Click</b> or <b>Ctrl-Click</b> the Waveform button: Opens a floating "Wave Zoom" slider (1.0x to 10.0x). This amplifies the visual height of waveforms without changing actual audio volume or gain. It is invaluable for visually identifying quiet vocal breaths or subtle Foley that would otherwise look like a flat line.</p>
+<p class="manual-p">Double-click the zoom label to reset back to 1.0x.</p>
+
+        <section id="chapter-6" class="manual-chapter">
+            <h2 class="chapter-heading">6. ACTION BUTTONS</h2>
+            
+            <figure class="manual-figure">
+                <img src="Pics/Action buttons.png" alt="Action Buttons Toolbar" loading="lazy">
+                <figcaption>Action Buttons Toolbar</figcaption>
+            </figure>
+        
+<p class="manual-p">At the right of the top header tool bar there are the action buttons featuring basic operative functions such as:</p>
+
+            <div id="section-6-1" class="manual-subsection">
+                <h3 class="subsection-heading">6.1 IMPORT AUDIO FILE</h3>
+                
+            <figure class="manual-figure">
+                <img src="Pics/Import Audio File.png" alt="Import Audio File Action" loading="lazy">
+                <figcaption>Import Audio File Action</figcaption>
+            </figure>
+            </div>
+        
+<p class="manual-p">Allows you to import audio files directly form your disk.</p>
+
+            <div id="section-6-2" class="manual-subsection">
+                <h3 class="subsection-heading">6.2 ADD EMPTY TRACK LANE</h3>
+                
+            <figure class="manual-figure">
+                <img src="Pics/Add Empty Track.png" alt="Add Empty Track Lane Action" loading="lazy">
+                <figcaption>Add Empty Track Lane Action</figcaption>
+            </figure>
+            </div>
+        
+<p class="manual-p">Creates a brand new clean timeline to place your new clips, move from another track or record new sounds.</p>
+
+            <div id="section-6-3" class="manual-subsection">
+                <h3 class="subsection-heading">6.3 DUPLICATE TRACK</h3>
+                
+            <figure class="manual-figure">
+                <img src="Pics/Duplicate Track.png" alt="Duplicate Selected Track Action" loading="lazy">
+                <figcaption>Duplicate Selected Track Action</figcaption>
+            </figure>
+            </div>
+        
+<p class="manual-p">Creates an exact copy of a select track, group of tracks or folder tracks with all its content.</p>
+
+            <div id="section-6-4" class="manual-subsection">
+                <h3 class="subsection-heading">6.4 STACK TRACK</h3>
+                
+            <figure class="manual-figure">
+                <img src="Pics/Stack Track.png" alt="Stack Track / Create Folder Group Action" loading="lazy">
+                <figcaption>Stack Track / Create Folder Group Action</figcaption>
+            </figure>
+            </div>
+        
+<p class="manual-p">Creates a folder with the selected tracks, ideal for organizing your timeline. When a folder is selected, the Stack Track buttons turns red, featuring the function of Un-stacking your folder, which deletes the foder releasing all your tracks free.</p>
+
+            <figure class="manual-figure">
+                <img src="Pics/Unstrack - Unfolder.png" alt="Unstack / Unfolder Action (Red Button)" loading="lazy">
+                <figcaption>Unstack / Unfolder Action (Red Button)</figcaption>
+            </figure>
+
+            <div id="section-6-5" class="manual-subsection">
+                <h3 class="subsection-heading">6.5 PRECOMPOSE SELECTED TRACKS</h3>
+                
+            <figure class="manual-figure">
+                <img src="Pics/Precompose selected track.png" alt="Precompose Selected Tracks Action" loading="lazy">
+                <figcaption>Precompose Selected Tracks Action</figcaption>
+            </figure>
+            </div>
+        
+<p class="manual-p">Creates a precomposition to wrap all your audio tracks. Ideal for cleaning up your timeline once sound design is locked.</p>
+
+        <section id="chapter-7" class="manual-chapter">
+            <h2 class="chapter-heading">7. THE OPTIONS MENU <img src="Pics/Three Dots.png" alt="Options Menu Icon" class="heading-inline-icon"></h2>
+            
+            <figure class="manual-figure">
+                <img src="Pics/Settings window.png" alt="The Options Menu Dropdown" loading="lazy">
+                <figcaption>The Options Menu Dropdown</figcaption>
+            </figure>
+        
+<p class="manual-p">Clicking the three vertical dots (...) in the top toolbar opens the Master Options</p>
+<p class="manual-p">Menu, providing fast access to global utilities:</p>
+
+            <div id="section-7-1" class="manual-subsection">
+                <h3 class="subsection-heading">7.1 GLOBAL SELECTION</h3>
+                
+            </div>
+        
+<p class="manual-p">Click on <b>Select All Tracks to</b> instantly highlight and select all track lanes in the composition. Click on <b>Deselect All</b> to clear all active selections, deselecting every track and clips.</p>
+
+            <div id="section-7-2" class="manual-subsection">
+                <h3 class="subsection-heading">7.2 BOUNCE SELECTED TRACK...</h3>
+                
+            </div>
+        
+<p class="manual-p">Opens the Track Bouncing dialog. Renders all clips on the chosen track, along with their active channel effects and volume automations, consolidating them into a single continuous audio file. You can choose to replace the original track or place the bounce on a new track. You can also choose to bounce the clip including automations and effects. This is particulary useful since AE Audio Effects tend to be kind of processor-intensive some times.</p>
+<p class="manual-p"><b><i>(After bouncing an audio clip with effects included, After Effects will chime the ‘render finished’ alert, because it is neccesary to export an actual render of the audio through the AE render engine to get the effects baked into a new audio clip).</i></b></p>
+
+            <div id="section-7-3" class="manual-subsection">
+                <h3 class="subsection-heading">7.3 BOUNCE SELECTED CLIPS...</h3>
+                
+            </div>
+        
+<p class="manual-p">Consolidates only the clips you have currently selected, merging them into one clean file.</p>
+
+            <div id="section-7-4" class="manual-subsection">
+                <h3 class="subsection-heading">7.4 PRECOMPOSE ENTIRE MIX</h3>
+                
+            </div>
+        
+<p class="manual-p">Automatically wraps all Mixtor audio tracks into a precomposition. Perfect for cleaning up your timeline once sound design is locked.</p>
+
+            <div id="section-7-5" class="manual-subsection">
+                <h3 class="subsection-heading">7.5 CLEAR ALL MARKERS</h3>
+                
+            </div>
+        
+<p class="manual-p">Deletes all cue markers from Mixtor's ruler in one click.</p>
+
+            <div id="section-7-6" class="manual-subsection">
+                <h3 class="subsection-heading">7.6 CLOSE ALL GAPS</h3>
+                
+            </div>
+        
+<p class="manual-p">Automatically eliminates empty gaps between clips on selected tracks, shifting clips to the left to form a continuous sequence (ideal for rough voiceover assemblies).</p>
+
+            <div id="section-7-7" class="manual-subsection">
+                <h3 class="subsection-heading">7.7 JOIN THROUGH EDITS</h3>
+                
+            </div>
+        
+<p class="manual-p">If you split a continuous clip into pieces and later decide you want it whole again, this command detects adjacent cuts from the same audio file and heals them back into a single unbroken clip.</p>
+
+            <div id="section-7-8" class="manual-subsection">
+                <h3 class="subsection-heading">7.8 ENABLE / DISABLE WORKING AREA</h3>
+                
+            </div>
+        
+<p class="manual-p">Displays or hides After Effects Work Area brackets (B for In, N for Out) directly on Mixtor's timeline ruler.</p>
+
+            <div id="section-7-9" class="manual-subsection">
+                <h3 class="subsection-heading">7.9 SHOW TOOLTIPS</h3>
+                
+            </div>
+        
+<p class="manual-p">Enables or disables interactive hover descriptions that appear over buttons and tools.</p>
+
+            <div id="section-7-10" class="manual-subsection">
+                <h3 class="subsection-heading">7.10 DESTRUCTIVE OVERLAPPING VS. CROSSFADE OVERLAPPING</h3>
+                
+            </div>
+        
+<p class="manual-p">Governs clip behavior when dragging one clip over another:</p>
+<p class="manual-p">- Enabled: The incoming clip overwrites and trims whatever lies underneath (standard NLE editing style).</p>
+<p class="manual-p">- Disabled: Clips can overlap smoothly, enabling automatic non-destructive crossfades (standard DAW mixing style).</p>
+
+            <div id="section-7-11" class="manual-subsection">
+                <h3 class="subsection-heading">7.11 RECORDING SETTINGS</h3>
+                
+            </div>
+        
+<p class="manual-p">Direct shortcut to the Audio Recording Settings dialog (described in Section 4.4).</p>
+
+            <div id="section-7-12" class="manual-subsection">
+                <h3 class="subsection-heading">7.12 EDIT KEYBOARD SHORTCUTS</h3>
+                
+            </div>
+        
+<p class="manual-p">Opens the interactive shortcut customization window.</p>
+
+            <div id="section-7-13" class="manual-subsection">
+                <h3 class="subsection-heading">7.13 DELETE ALL TRACKS...</h3>
+                
+            </div>
+        
+<p class="manual-p">Highlighted in red, deletes all Mixtor audio tracks from the active composition. Includes a confirmation safety check and is 100% reversible via standard Undo (Ctrl+Z / Cmd+Z).</p>
+
+        <section id="chapter-8" class="manual-chapter">
+            <h2 class="chapter-heading">8. KEYBOARD SHORTCUTS CUSTOMIZER</h2>
+            
+        
+
+            <div id="section-8-1" class="manual-subsection">
+                <h3 class="subsection-heading">8.1 CUSTOMIZING YOUR KEYBINDINGS</h3>
+                
+            </div>
+        
+<p class="manual-p">Navigate to Options Menu (...) &gt; "<b>Edit Keyboard Shortcuts</b>": A modal opens with a clear 3-column grid listing all major extension actions (Play, Pointer, Hand, Cut, Fades, Rolling Edit, Automation, Snap, Markers, Copy, Paste, Delete, Ripple, etc.). Click any input box and press your preferred key on your physical keyboard. Click "Save" to apply your changes immediately.</p>
+
+            <div id="section-8-2" class="manual-subsection">
+                <h3 class="subsection-heading">8.2 RESETTING TO FACTORY DEFAULTS</h3>
+                
+            </div>
+        
+<p class="manual-p">To revert back to the original out-of-the-box key bindings, click "Reset Defaults" in the lower-left corner of the dialog, then click "Save".</p>
+
+        <section id="chapter-9" class="manual-chapter">
+            <h2 class="chapter-heading">9. CLIP CONTEXT MENU (RIGHT-CLICK)</h2>
+            
+            <figure class="manual-figure">
+                <img src="Pics/Clip Options Menu.png" alt="Clip Context Menu (Right-Click)" loading="lazy">
+                <figcaption>Clip Context Menu (Right-Click)</figcaption>
+            </figure>
+        
+<p class="manual-p">Right-clicking any clip on the timeline opens a context menu with precision tools:</p>
+
+            <div id="section-9-1" class="manual-subsection">
+                <h3 class="subsection-heading">9.1 EDIT IN SAMPLER</h3>
+                
+            </div>
+        
+<p class="manual-p">Instantly sends the audio clip into Mixtor's Foley Sampler Studio for slicing, pitch-shifting, or adding to your sound library.</p>
+
+            <div id="section-9-2" class="manual-subsection">
+                <h3 class="subsection-heading">9.2 CROSS FADE &amp; REMOVE CROSSFADE (X)</h3>
+                
+            </div>
+        
+<p class="manual-p">When two adjacent or overlapping clips are selected, choosing "Cross Fade" (or pressing X) builds an equal-power crossfade transition between them. If a crossfade already exists, the menu offers "Remove Cross Fade" to cleanly revert it. Also pressing X will remove an existing crossfade.</p>
+
+            <div id="section-9-3" class="manual-subsection">
+                <h3 class="subsection-heading">9.3 MUTE / UNMUTE</h3>
+                
+            </div>
+        
+<p class="manual-p">Mutes or unmutes the individual clip without affecting other audio on the same track. Muted clips dim visually.</p>
+
+            <div id="section-9-4" class="manual-subsection">
+                <h3 class="subsection-heading">9.4 CHANGE SPEED &amp; NATIVE AE STRETCH LOGIC</h3>
+                
+            </div>
+        
+<p class="manual-p">Opens the speed modification dialog: Enter a speed percentage (e.g., 200% for double speed, 50% for half speed).</p>
+<p class="manual-p">"Use Native AE Stretch Logic" Checkbox: When checked, 200% stretches duration</p>
+<p class="manual-p">to half-speed (native After Effects logic). When unchecked, 200% plays twice as fast (standard editing logic).</p>
+
+            <div id="section-9-5" class="manual-subsection">
+                <h3 class="subsection-heading">9.5 REVERSE CLIP (REAL-TIME PLAYBACK INVERSION)</h3>
+                
+            </div>
+        
+<p class="manual-p">Flips the audio file backwards in real time and recalculates its waveform. Great for reversed cymbals, tension whooshes, and eerie transitions.</p>
+
+            <div id="section-9-6" class="manual-subsection">
+                <h3 class="subsection-heading">9.6 BOUNCE SELECTED CLIP</h3>
+                
+            </div>
+        
+<p class="manual-p">Consolidates the active clip(s) with its volume automation and effects rendered if neccesary.</p>
+
+            <div id="section-9-7" class="manual-subsection">
+                <h3 class="subsection-heading">9.7 CUT, COPY, PASTE &amp; DELETE</h3>
+                
+            </div>
+        
+<p class="manual-p">Standard clipboard operations:</p>
+<p class="manual-p">- Cut Clip: Cuts clip to clipboard.</p>
+<p class="manual-p">- Copy Clip: Copies clip.</p>
+<p class="manual-p">- Paste Clip: Pastes at the playhead position.</p>
+<p class="manual-p">- Delete Clip: Removes the clip from the timeline.</p>
+
+            <div id="section-9-8" class="manual-subsection">
+                <h3 class="subsection-heading">9.8 REPEAT MULTIPLE TIMES...</h3>
+                
+            </div>
+        
+<p class="manual-p">Prompts you for a repetition count, duplicating the clip sequentially back-to-back.</p>
+
+            <div id="section-9-9" class="manual-subsection">
+                <h3 class="subsection-heading">9.9 LOOP / UNLOOP CLIP</h3>
+                
+            </div>
+        
+<p class="manual-p">Enables looping mode: dragging the right edge of the clip loops the audio content cyclically extending int up to 1 hour. If you are looping a rhythm section, the loop quality will depend on the edit precision, so you can always click con Unloop Clip to adjust it and loop again.</p>
+
+            <div id="section-9-10" class="manual-subsection">
+                <h3 class="subsection-heading">9.10 UNSTACK / UNFOLDER</h3>
+                
+            <figure class="manual-figure">
+                <img src="Pics/Folder track CLOSED.png" alt="Folder Track Collapsed" loading="lazy">
+                <figcaption>Folder Track Collapsed</figcaption>
+            </figure>
+            <figure class="manual-figure">
+                <img src="Pics/Folder track OPEN.png" alt="Folder Track Expanded (Showing Member Tracks)" loading="lazy">
+                <figcaption>Folder Track Expanded (Showing Member Tracks)</figcaption>
+            </figure>
+            </div>
+        
+<p class="manual-p">If the clip belongs to a folder track stack, this command unpacks the group back into individual lanes.</p>
+
+            <div id="section-9-11" class="manual-subsection">
+                <h3 class="subsection-heading">9.11 MOVE SUBMENU</h3>
+                
+            </div>
+        
+<p class="manual-p">- In to Playhead Position (`[`): Snaps the start of the clip to the playhead line.</p>
+<p class="manual-p">- Out to Playhead Position (`]`): Snaps the end of the clip to the playhead line.</p>
+<p class="manual-p">- To Beginning: Sends the clip to time 0:00:00:00.</p>
+
+            <div id="section-9-12" class="manual-subsection">
+                <h3 class="subsection-heading">9.12 SMART SELECTION SUBMENU</h3>
+                
+            </div>
+        
+<p class="manual-p">High-speed bulk selection tools:</p>
+<p class="manual-p">- Select All: Selects every clip across all tracks.</p>
+<p class="manual-p">- Select All Following: Selects all clips to the right of this clip across all tracks.</p>
+<p class="manual-p">- All Following of Same Track: Selects clips to the right on THIS track only.</p>
+<p class="manual-p">- Select All Previous: Selects clips to the left across all tracks.</p>
+<p class="manual-p">- All Previous of Same Track: Selects clips to the left on this track.</p>
+<p class="manual-p">- Deselect All: Clears all selection highlights.</p>
+
+            <div id="section-9-13" class="manual-subsection">
+                <h3 class="subsection-heading">9.13 RENAME CLIP</h3>
+                
+            </div>
+        
+<p class="manual-p">Opens an in-line dialog to give the clip a descriptive name (e.g., "Main Vocal", "Door Slam", "Impact SFX").</p>
+
+            <div id="section-9-14" class="manual-subsection">
+                <h3 class="subsection-heading">9.14 LABEL COLOR TAGGING (16 AFTER EFFECTS COLORS)</h3>
+                
+            </div>
+        
+<p class="manual-p">Displays the full 16-color palette from After Effects (Red, Yellow, Aqua, Peach, Lavender, Magenta, etc.). Color-code your tracks to instantly distinguish music, foley, ambiance, and dialogue.</p>
+
+            <div id="section-9-15" class="manual-subsection">
+                <h3 class="subsection-heading">9.15 LOCK CLIP</h3>
+                
+            </div>
+        
+<p class="manual-p">Pins the clip in place, preventing accidental moving, trimming, or deleting until unlocked.</p>
+
+            <div id="section-9-16" class="manual-subsection">
+                <h3 class="subsection-heading">9.16 GAP CONTEXT MENU (RIPPLE DELETE / DELETE GAP)</h3>
+                
+            </div>
+        
+<p class="manual-p">Right-clicking an empty space between two clips opens the Gap Context Menu:</p>
+<p class="manual-p">- "Paste Clip": Pastes clipboard audio directly into the gap.</p>
+<p class="manual-p">- "Delete Gap" (Ripple Delete): Collapses the silence, shifting all subsequent clips to the left to close the gap automatically.</p>
+
+        <section id="chapter-10" class="manual-chapter">
+            <h2 class="chapter-heading">10. AUDIO EFFECTS SUITE (CHANNEL STRIP FX)</h2>
+            
+        
+<p class="manual-p">You can apply the native AE effects to audio tracks directly from Mixtor, which features visual DAW-like interfaces for each effect.</p>
+
+            <div id="section-10-1" class="manual-subsection">
+                <h3 class="subsection-heading">10.1 HOW TO INSERT EFFECTS ON A TRACK</h3>
+                
+            </div>
+        
+
+        <div class="manual-step">
+            <span class="step-num">1.</span>
+            <div class="step-content">In the track header, click the dropdown labeled "+ FX" or "Add Effect...".</div>
+        </div>
+
+        <div class="manual-step">
+            <span class="step-num">2.</span>
+            <div class="step-content">Select any effect from the menu (e.g., "Parametric EQ", "Compressor", "Reverb").</div>
+        </div>
+
+        <div class="manual-step">
+            <span class="step-num">3.</span>
+            <div class="step-content">The effect badge appears in the track header.</div>
+        </div>
+
+        <div class="manual-step">
+            <span class="step-num">4.</span>
+            <div class="step-content">Click the badge to open its visual editor modal with knobs and switches.</div>
+        </div>
+<p class="manual-p"><b><i>(Native AE Audio Effects are usually processor-intensive so they will behave the same on Mixtor, meaning, there is no live effect adjusting… sorry).</i></b><b></b></p>
+
+            <div id="section-10-2" class="manual-subsection">
+                <h3 class="subsection-heading">10.2 CORE ARCHITECTURAL RULE: MAXIMUM 1 INSTANCE PER EFFECT PER CHANNEL</h3>
+                
+            </div>
+        
+<p class="manual-p">By design and to guarantee blazing performance inside After Effects, Mixtor enforces an important architecture rule:</p>
+<p class="manual-p"><b><i>“EACH TRACK ACCEPTS ONLY ONE (1) INSTANCE OF EACH EFFECT TYPE”</i></b><b></b></p>
+<p class="manual-p">This means on Track 1 you can have:</p>
+<p class="manual-p">- 1 Parametric EQ + 1 Compressor + 1 Delay + 1 Reverb + 1 Gate... (a complete multi-effect channel strip).</p>
+<p class="manual-p">- But you CANNOT add two separate "Parametric EQ" plugins to the same track through Mixtor.</p>
+<p class="manual-p">If you attempt to add an effect that already exists on that track, Mixtor will notify you that the effect is already present and will immediately open its control window for you to edit. So if you wish to add another instance of a given effect, you will have to do it directly on the audio layer in the composition.</p>
+<p class="manual-p">Why is this designed this way?</p>
+
+        <div class="manual-step">
+            <span class="step-num">1.</span>
+            <div class="step-content">Zero Latency Performance: Prevents After Effects from slowing down under hundreds of redundant plugin instances.</div>
+        </div>
+
+        <div class="manual-step">
+            <span class="step-num">2.</span>
+            <div class="step-content">Clean Parameter Mapping: Every effect parameter connects directly and cleanly with After Effects expression controls on the track layer.</div>
+        </div>
+
+        <div class="manual-step">
+            <span class="step-num">3.</span>
+            <div class="step-content">Industry Best Practices: One surgical EQ and one solid compressor is the proven golden standard for clean channel mixing. If you ever need complex multi-stage processing, you can duplicate the track or use "Bounce Selected Track" to print the first stage.</div>
+        </div>
+
+            <div id="section-10-3" class="manual-subsection">
+                <h3 class="subsection-heading">10.3 COMPREHENSIVE GUIDE TO INCLUDED EFFECTS</h3>
+                
+            </div>
+        
+
+            <div id="section-10-3-1" class="manual-sub-subsection">
+                <h4 class="sub-subsection-heading">10.3.1 Parametric EQ (3-Band Precision Equalizer)</h4>
+                
+            <figure class="manual-figure">
+                <img src="Pics/Parametric EQ UI.png" alt="Parametric EQ — 3-Band Precision Equalizer Interface" loading="lazy">
+                <figcaption>Parametric EQ — 3-Band Precision Equalizer Interface</figcaption>
+            </figure>
+            </div>
+        
+<p class="manual-p">- Sculpts vocal warmth, dialogue clarity, and eliminates mud.</p>
+<p class="manual-p">- Band 1 (B1 - Lows/Bass): Frequency (Freq), Bandwidth (Width), and Gain (-24 to +24 dB).</p>
+<p class="manual-p">- Band 2 (B2 - Mids): Cleans up boxy frequencies or adds vocal presence.</p>
+<p class="manual-p">- Band 3 (B3 - Highs/Air): Adds sparkle, clarity, and top-end sheen.</p>
+<p class="manual-p">- Each band features an individual On/Off toggle.</p>
+
+            <div id="section-10-3-2" class="manual-sub-subsection">
+                <h4 class="sub-subsection-heading">10.3.2 Compressor (Dynamic Leveler)</h4>
+                
+            <figure class="manual-figure">
+                <img src="Pics/Compressor UI.png" alt="Compressor — Professional Dynamic Leveler Interface" loading="lazy">
+                <figcaption>Compressor — Professional Dynamic Leveler Interface</figcaption>
+            </figure>
+            </div>
+        
+<p class="manual-p">- Tames loud dynamic peaks so dialog stays clear and present over music.</p>
+<p class="manual-p">- Threshold: The dB level where compression kicks in.</p>
+<p class="manual-p">- Ratio: How aggressively the signal is reduced (e.g., 3:1, 4:1).</p>
+<p class="manual-p">- Knee: Smoothness of the compression curve.</p>
+<p class="manual-p">- Attack &amp; Release: How fast the compressor clamps down and lets go.</p>
+<p class="manual-p">- Makeup Gain: Restores lost level after compression.</p>
+<p class="manual-p">- Limiter: Safety ceiling preventing digital peaks.</p>
+<p class="manual-p">- Auto Release: Smart algorithm automatically adapting release times.</p>
+
+            <div id="section-10-3-3" class="manual-sub-subsection">
+                <h4 class="sub-subsection-heading">10.3.3 Bass &amp; Treble</h4>
+                
+            <figure class="manual-figure">
+                <img src="Pics/Bass & Treble UI.png" alt="Bass & Treble — Tone Sculpting Interface" loading="lazy">
+                <figcaption>Bass & Treble — Tone Sculpting Interface</figcaption>
+            </figure>
+            </div>
+        
+<p class="manual-p">- Fast, two-knob tone shaper for quick low and high-end boosts or cuts.</p>
+
+            <div id="section-10-3-4" class="manual-sub-subsection">
+                <h4 class="sub-subsection-heading">10.3.4 Delay</h4>
+                
+            <figure class="manual-figure">
+                <img src="Pics/Delay UI.png" alt="Delay — Stereo Echo & Rhythmic Reflections Interface" loading="lazy">
+                <figcaption>Delay — Stereo Echo & Rhythmic Reflections Interface</figcaption>
+            </figure>
+            </div>
+        
+<p class="manual-p">- Creates echoes and stereo space.</p>
+<p class="manual-p">- Delay Time (ms), Delay Amount, Feedback, and Dry/Wet mix balance.</p>
+
+            <div id="section-10-3-5" class="manual-sub-subsection">
+                <h4 class="sub-subsection-heading">10.3.5 Distortion</h4>
+                
+            <figure class="manual-figure">
+                <img src="Pics/Distortion UI.png" alt="Distortion — Harmonic Saturation & Bitcrusher Interface" loading="lazy">
+                <figcaption>Distortion — Harmonic Saturation & Bitcrusher Interface</figcaption>
+            </figure>
+            </div>
+        
+<p class="manual-p">- 6 distortion algorithms, Drive, Gain, and Bitcrusher resolution controls for retro, lo-fi, or gritty industrial sound design.</p>
+
+            <div id="section-10-3-6" class="manual-sub-subsection">
+                <h4 class="sub-subsection-heading">10.3.6 Flange &amp; Chorus</h4>
+                
+            <figure class="manual-figure">
+                <img src="Pics/Flange & Chorus UI.png" alt="Flange & Chorus — Spatial Dimension & Modulation Interface" loading="lazy">
+                <figcaption>Flange & Chorus — Spatial Dimension & Modulation Interface</figcaption>
+            </figure>
+            </div>
+        
+<p class="manual-p">- Stereo voice doubling, modulation depth, rate, and phase inversion for lush acoustic movement.</p>
+
+            <div id="section-10-3-7" class="manual-sub-subsection">
+                <h4 class="sub-subsection-heading">10.3.7 Gate (Noise Gate)</h4>
+                
+            <figure class="manual-figure">
+                <img src="Pics/Gate UI.png" alt="Gate — Noise Gate Interface" loading="lazy">
+                <figcaption>Gate — Noise Gate Interface</figcaption>
+            </figure>
+            </div>
+        
+<p class="manual-p">- Automatically mutes the channel when the signal drops below a threshold, silencing room noise, hum, and breath sounds between spoken words.</p>
+
+            <div id="section-10-3-8" class="manual-sub-subsection">
+                <h4 class="sub-subsection-heading">10.3.8 High-Low Pass</h4>
+                
+            <figure class="manual-figure">
+                <img src="Pics/High-Low Pass UI.png" alt="High-Low Pass — Bandwidth Limiting Interface" loading="lazy">
+                <figcaption>High-Low Pass — Bandwidth Limiting Interface</figcaption>
+            </figure>
+            </div>
+        
+<p class="manual-p">- Clean cutoff filters to remove rumble below 80 Hz or soften piercing highs.</p>
+
+            <div id="section-10-3-9" class="manual-sub-subsection">
+                <h4 class="sub-subsection-heading">10.3.9 Modulator</h4>
+                
+            <figure class="manual-figure">
+                <img src="Pics/Modulator UI.png" alt="Modulator — Tremolo & Vibrato Waves Interface" loading="lazy">
+                <figcaption>Modulator — Tremolo & Vibrato Waves Interface</figcaption>
+            </figure>
+            </div>
+        
+<p class="manual-p">- Generates periodic Tremolo (volume pulsing) or Vibrato (pitch wobbles).</p>
+
+            <div id="section-10-3-10" class="manual-sub-subsection">
+                <h4 class="sub-subsection-heading">10.3.10 Reverb</h4>
+                
+            <figure class="manual-figure">
+                <img src="Pics/Reverb UI.png" alt="Reverb — Acoustic Space & Room Simulation Interface" loading="lazy">
+                <figcaption>Reverb — Acoustic Space & Room Simulation Interface</figcaption>
+            </figure>
+            </div>
+        
+<p class="manual-p">- Simulates realistic physical spaces (studios, rooms, halls, churches).</p>
+<p class="manual-p">- Reverb Time, Diffusion, Decay, Brightness, and Dry/Wet mix.</p>
+
+            <div id="section-10-3-11" class="manual-sub-subsection">
+                <h4 class="sub-subsection-heading">10.3.11 Tone</h4>
+                
+            <figure class="manual-figure">
+                <img src="Pics/Tone UI.png" alt="Tone — Multi-Frequency Audio Generator Interface" loading="lazy">
+                <figcaption>Tone — Multi-Frequency Audio Generator Interface</figcaption>
+            </figure>
+            </div>
+        
+<p class="manual-p">- Generates clean sine/square audio tones (e.g., 440 Hz concert pitch or test tones).</p>
+
+            <div id="section-10-4" class="manual-subsection">
+                <h3 class="subsection-heading">10.4 BYPASS (ON/OFF) &amp; EFFECT REMOVAL</h3>
+                
+            </div>
+        
+<p class="manual-p">In any effect window, click the On/Off Bypass icon in the top right to compare the processed sound against the raw audio. To remove an effect, click the small "x" button next to its badge on the track header.</p>
+
+        <section id="chapter-11" class="manual-chapter">
+            <h2 class="chapter-heading">11. NON-DESTRUCTIVE CROSSFADES</h2>
+            
+        
+
+            <div id="section-11-1" class="manual-subsection">
+                <h3 class="subsection-heading">11.1 NON-DESTRUCTIVE OVERLAPPING</h3>
+                
+            </div>
+        
+<p class="manual-p">When dragging two adjacent clips so they slightly overlap on the same track: With "Destructive Overlapping" turned off in Options, both clips preserve their underlying audio data under the overlap.</p>
+
+            <div id="section-11-2" class="manual-subsection">
+                <h3 class="subsection-heading">11.2 APPLYING INSTANT CROSSFADES WITH THE X KEY</h3>
+                
+            </div>
+        
+
+        <div class="manual-step">
+            <span class="step-num">1.</span>
+            <div class="step-content">Select both overlapping clips.</div>
+        </div>
+
+        <div class="manual-step">
+            <span class="step-num">2.</span>
+            <div class="step-content">Press the `X` key (or right-click and choose "Cross Fade").</div>
+        </div>
+
+        <div class="manual-step">
+            <span class="step-num">3.</span>
+            <div class="step-content">Mixtor generates an Equal-Power crossfade curve that gently attenuates the first clip while raising the second, preventing dips in volume or audio clicks.</div>
+        </div>
+
+        <div class="manual-step">
+            <span class="step-num">4.</span>
+            <div class="step-content">Press teh X key again if you wish to remove an existing cross fade.</div>
+        </div>
+
+            <div id="section-11-3" class="manual-subsection">
+                <h3 class="subsection-heading">11.3 VISUAL TRANSITION LENGTH ADJUSTMENT</h3>
+                
+            </div>
+        
+<p class="manual-p">Drag the crossfade boundary handles horizontally to make the transition subtle and slow (ideal for music or ambient beds) or rapid (for dialogue smoothing).</p>
+
+        <section id="chapter-12" class="manual-chapter">
+            <h2 class="chapter-heading">12. FOLEY SAMPLER STUDIO & SOUND DESIGN</h2>
+            
+            <figure class="manual-figure">
+                <img src="Pics/Sampler.png" alt="Foley Sampler Studio — Dedicated Audio Slicing & Library Interface" loading="lazy">
+                <figcaption>Foley Sampler Studio — Dedicated Audio Slicing & Library Interface</figcaption>
+            </figure>
+        
+
+            <div id="section-12-1" class="manual-subsection">
+                <h3 class="subsection-heading">12.1 ACCESSING SAMPLER MODE</h3>
+                
+            </div>
+        
+<p class="manual-p">Click the "Sampler" button in the top toolbar:</p>
+<p class="manual-p">- The interface transforms into a full-screen Foley Sound Design Studio.</p>
+<p class="manual-p">- Designed for editors who need to isolate sound effects from massive sound libraries (whooshes, footsteps, hits, glitches) or sampling an interesting sound fragment before placing them in the comp.</p>
+
+            <div id="section-12-2" class="manual-subsection">
+                <h3 class="subsection-heading">12.2 LOADING AUDIO</h3>
+                
+            </div>
+        
+<p class="manual-p">Load any audio file from your hard drive ("<b>Import Audio</b>"), choose existing project footage ("<b>From Project</b>"), or right-click any timeline clip and choose "<b>Sample This Clip</b>".</p>
+
+            <div id="section-12-3" class="manual-subsection">
+                <h3 class="subsection-heading">12.3 MILLISECOND-ACCURATE IN &amp; OUT POINTS</h3>
+                
+            </div>
+        
+<p class="manual-p">- Drag the green In-point marker to the start of the sound effect.</p>
+<p class="manual-p">- Drag the red Out-point marker to the end.</p>
+<p class="manual-p">- Real-time timecode displays your selection length down to 1/1000th of a second (00:00.000).</p>
+
+            <div id="section-12-4" class="manual-subsection">
+                <h3 class="subsection-heading">12.4 CREATIVE CONTROLS</h3>
+                
+            </div>
+        
+<p class="manual-p">- Speed Slider: Adjust pitch and speed from 0.25x to 2.0x.</p>
+<p class="manual-p">- Reverse: Play the sample backwards.</p>
+<p class="manual-p">- Loop: Test continuous textures or even create a new sound beat for your animation.</p>
+
+            <div id="section-12-5" class="manual-subsection">
+                <h3 class="subsection-heading">12.5 SAVING TO YOUR PERMANENT SAMPLES LIBRARY</h3>
+                
+            </div>
+        
+<p class="manual-p">- Name your slice in the "<b>Sample name</b>" box and click "<b>Save to Lib</b>".</p>
+<p class="manual-p">- The sound is saved permanently to your sidebar library with auto-auditioning on click, building your own personal Foley repository.</p>
+
+            <div id="section-12-6" class="manual-subsection">
+                <h3 class="subsection-heading">12.6 PLACING INTO TIMELINE</h3>
+                
+            </div>
+        
+<p class="manual-p">- "Trim &amp; Place": Non-destructively inserts the trimmed sound directly at your current timeline playhead.</p>
+<p class="manual-p">- "Place in Timeline": Commits the slice as a new independent project asset and places it into your After Effects composition.</p>
+
+        <section id="chapter-13" class="manual-chapter">
+            <h2 class="chapter-heading">13. STUDIO MODE (LIVE WEB AUDIO ENGINE)</h2>
+            
+            <figure class="manual-figure">
+                <img src="Pics/Studio mode On.png" alt="Studio Mode — High-Performance Live Web Audio Engine Active" loading="lazy">
+                <figcaption>Studio Mode — High-Performance Live Web Audio Engine Active</figcaption>
+            </figure>
+        
+
+            <div id="section-13-1" class="manual-subsection">
+                <h3 class="subsection-heading">13.1 WHAT IS STUDIO MODE?</h3>
+                
+            </div>
+        
+<p class="manual-p">Clicking "<b>Studio</b>" in the top header activates Mixtor's real-time Web Audio engine: In native After Effects, audio playback often stutters if your composition has heavy 4K video layers, 3D cameras, or unrendered motion blur.</p>
+<p class="manual-p">While playing back your comp thorugh RAM preview you will notice that the Mixtor’s playhead will not run at the exact same time that the AE playhead, because it is only an estimate that will always correct when playback is stopped.</p>
+<p class="manual-p">Studio Mode runs audio playback independently through a high-performance Web Audio pipeline, bypasing the RAM prevew and delivering flawless real-time audio playback with zero playhead lag. It is the ultimate mode for rhythm editing and dialogue trimming at high speed.</p>
+<p class="manual-p"><b><i>(In Studio mode video RAM preview is not available. Also Audio Effects are bypassed since the Web Audio pipeline is no able no manage the native AE Audio Effects).</i></b><b></b></p>
+
+        <section id="chapter-14" class="manual-chapter">
+            <h2 class="chapter-heading">14. LICENSING, 10-DAY FREE TRIAL & SUPPORT</h2>
+            
+        
+
+            <div id="section-14-1" class="manual-subsection">
+                <h3 class="subsection-heading">14.1 10-DAY UNRESTRICTED FREE TRIAL</h3>
+                
+            </div>
+        
+<p class="manual-p">Every new installation of Mixtor includes a full-featured 10-day free trial with</p>
+<p class="manual-p">all features unlocked:</p>
+<p class="manual-p">- Check your remaining time in the Help dialog ("Trial: X days remaining").</p>
+<p class="manual-p">- No credit card or pre-registration required.</p>
+
+            <div id="section-14-2" class="manual-subsection">
+                <h3 class="subsection-heading">14.2 ACTIVATING YOUR COMMERCIAL LICENSE KEY</h3>
+                
+            </div>
+        
+
+        <div class="manual-step">
+            <span class="step-num">1.</span>
+            <div class="step-content">Purchase your license from the official web store at <b><i>https://rojusscripts.com/mixtor.</i></b><b></b></div>
+        </div>
+
+        <div class="manual-step">
+            <span class="step-num">2.</span>
+            <div class="step-content">You will receive your license key via email (format: `MIXTOR-XXXX-XXXX-XXXX`).</div>
+        </div>
+
+        <div class="manual-step">
+            <span class="step-num">3.</span>
+            <div class="step-content">Click <b>"Help" &gt; "Activate Product"</b> (or click the alert if your trial expired).</div>
+        </div>
+
+        <div class="manual-step">
+            <span class="step-num">4.</span>
+            <div class="step-content">Enter your license key and click "Activate License".</div>
+        </div>
+
+        <div class="manual-step">
+            <span class="step-num">5.</span>
+            <div class="step-content">Your software is permanently registered on your computer.</div>
+        </div>
+
+            <div id="section-14-3" class="manual-subsection">
+                <h3 class="subsection-heading">14.3 BUILT-IN IN-APP SUPPORT HUB &amp; RECOVERY</h3>
+                
+            <figure class="manual-figure">
+                <img src="Pics/Help Section.png" alt="Built-in In-App Support Hub & Instant License Recovery" loading="lazy">
+                <figcaption>Built-in In-App Support Hub & Instant License Recovery</figcaption>
+            </figure>
+            </div>
+        
+<p class="manual-p">Need help or experiencing an unexpected bug?</p>
+<p class="manual-p">- Click <b>"Help" &gt; "Get Support".</b></p>
+<p class="manual-p">- Write your message directly to our team (<b><i>mixtorsupport@gmail.com</i></b>).</p>
+<p class="manual-p">- Mixtor automatically attaches anonymous system diagnostics (After Effects version, OS build) so our team can solve your issue quickly.</p>
+<p class="manual-p">- You will receive a response via email.</p>
+<p class="manual-p">- <b>Misplaced your key?</b> Click "<b>Instant License Recovery</b>" in the same modal to retrieve it instantly using your purchase email.</p>
+
+            <div id="section-14-4" class="manual-subsection">
+                <h3 class="subsection-heading">14.4 SOFTWARE UPDATES</h3>
+                
+            </div>
+        
+<p class="manual-p">In the Help window, click "<b>Check for updates now</b>" to verify your version, or keep "<b>Check for updates automatically</b>" checked to receive friendly notification whenever new features drop.</p>
+
+        <section id="chapter-15" class="manual-chapter">
+            <h2 class="chapter-heading">15. APPENDIX: MASTER KEYBOARD SHORTCUTS REFERENCE TABLE</h2>
+            
+        
+<p class="manual-p">Default factory keybindings (customizable via Options &gt; Edit Keyboard Shortcuts):</p>
+
+            <div id="section-15-1" class="manual-subsection">
+                <h3 class="subsection-heading">15.1 NAVIGATION &amp; TRANSPORT KEYBINDINGS</h3>
+                
+            </div>
+        
+
+            <div class="shortcut-row">
+                <span class="shortcut-key"><kbd>Spacebar</kbd></span>
+                <span class="shortcut-desc">Play / Pause Playback</span>
+            </div>
+            
+
+            <div class="shortcut-row">
+                <span class="shortcut-key"><kbd>R</kbd></span>
+                <span class="shortcut-desc">Record Audio / Stop Recording</span>
+            </div>
+            
+
+            <div class="shortcut-row">
+                <span class="shortcut-key"><kbd>Home / Prev Button</kbd></span>
+                <span class="shortcut-desc">Jump to Beginning (Frame 0)</span>
+            </div>
+            
+
+            <div class="shortcut-row">
+                <span class="shortcut-key"><kbd>J</kbd></span>
+                <span class="shortcut-desc">Horizontal Timeline Zoom In</span>
+            </div>
+            
+
+            <div class="shortcut-row">
+                <span class="shortcut-key"><kbd>G</kbd></span>
+                <span class="shortcut-desc">Horizontal Timeline Zoom Out</span>
+            </div>
+            
+
+            <div class="shortcut-row">
+                <span class="shortcut-key"><kbd>Shift + Mouse Wheel</kbd></span>
+                <span class="shortcut-desc">Horizontal Timeline Scroll</span>
+            </div>
+            
+
+            <div class="shortcut-row">
+                <span class="shortcut-key"><kbd>B</kbd></span>
+                <span class="shortcut-desc">Set Work Area In Point</span>
+            </div>
+            
+
+            <div class="shortcut-row">
+                <span class="shortcut-key"><kbd>N</kbd></span>
+                <span class="shortcut-desc">Set Work Area Out Point</span>
+            </div>
+            
+
+            <div class="shortcut-row">
+                <span class="shortcut-key"><kbd>Ctrl/Cmd + *</kbd></span>
+                <span class="shortcut-desc">Add Marker at Playhead</span>
+            </div>
+            
+
+            <div id="section-15-2" class="manual-subsection">
+                <h3 class="subsection-heading">15.2 EDITING TOOL SHORTCUTS</h3>
+                
+            </div>
+        
+
+            <div class="shortcut-row">
+                <span class="shortcut-key"><kbd>V</kbd></span>
+                <span class="shortcut-desc">Pointer / Selection Tool</span>
+            </div>
+            
+
+            <div class="shortcut-row">
+                <span class="shortcut-key"><kbd>H</kbd></span>
+                <span class="shortcut-desc">Hand Tool</span>
+            </div>
+            
+
+            <div class="shortcut-row">
+                <span class="shortcut-key"><kbd>K</kbd></span>
+                <span class="shortcut-desc">Razor Tool</span>
+            </div>
+            
+
+            <div class="shortcut-row">
+                <span class="shortcut-key"><kbd>C</kbd></span>
+                <span class="shortcut-desc">Slice at playhead position</span>
+            </div>
+            
+
+            <div class="shortcut-row">
+                <span class="shortcut-key"><kbd>F</kbd></span>
+                <span class="shortcut-desc">Fades Tool</span>
+            </div>
+            
+
+            <div class="shortcut-row">
+                <span class="shortcut-key"><kbd>T</kbd></span>
+                <span class="shortcut-desc">Select and switches Trimming tools</span>
+            </div>
+            
+
+            <div class="shortcut-row">
+                <span class="shortcut-key"><kbd>A</kbd></span>
+                <span class="shortcut-desc">Automation Mode (Volume &amp;amp; Pan Envelopes)</span>
+            </div>
+            
+
+            <div class="shortcut-row">
+                <span class="shortcut-key"><kbd>S</kbd></span>
+                <span class="shortcut-desc">Toggle Magnetic Grid Snapping</span>
+            </div>
+            
+
+            <div id="section-15-3" class="manual-subsection">
+                <h3 class="subsection-heading">15.3 CLIP MANIPULATION &amp; TRACK COMMANDS</h3>
+                
+            </div>
+        
+
+            <div class="shortcut-row">
+                <span class="shortcut-key"><kbd>X</kbd></span>
+                <span class="shortcut-desc">Apply Cross Fade</span>
+            </div>
+            
+
+            <div class="shortcut-row">
+                <span class="shortcut-key"><kbd>[ (Left Bracket)</kbd></span>
+                <span class="shortcut-desc">Snap Clip In Point to Playhead</span>
+            </div>
+            
+
+            <div class="shortcut-row">
+                <span class="shortcut-key"><kbd>] (Right Bracket)</kbd></span>
+                <span class="shortcut-desc">Snap Clip Out Point to Playhead</span>
+            </div>
+            
+
+            <div class="shortcut-row">
+                <span class="shortcut-key"><kbd>Ctrl + C</kbd></span>
+                <span class="shortcut-desc">Copy Clip</span>
+            </div>
+            
+
+            <div class="shortcut-row">
+                <span class="shortcut-key"><kbd>Ctrl + X</kbd></span>
+                <span class="shortcut-desc">Cut Clip</span>
+            </div>
+            
+
+            <div class="shortcut-row">
+                <span class="shortcut-key"><kbd>Ctrl + V</kbd></span>
+                <span class="shortcut-desc">Paste Clip at Playhead</span>
+            </div>
+            
+
+            <div class="shortcut-row">
+                <span class="shortcut-key"><kbd>Delete / Backspace</kbd></span>
+                <span class="shortcut-desc">Delete Selected Clip</span>
+            </div>
+            
+
+            <div class="shortcut-row">
+                <span class="shortcut-key"><kbd>Ctrl/Cmd + A</kbd></span>
+                <span class="shortcut-desc">Select All Clips</span>
+            </div>
+            
+
+            <div class="shortcut-row">
+                <span class="shortcut-key"><kbd>Ctrl/Cmd + Shift + A</kbd></span>
+                <span class="shortcut-desc">Deselect All</span>
+            </div>
+            
+
+            <div class="shortcut-row">
+                <span class="shortcut-key"><kbd>Ctrl/Cmd + Z</kbd></span>
+                <span class="shortcut-desc">Undo</span>
+            </div>
+            
+<p class="manual-p">© 2026 RojusScripts. All rights reserved.</p>
+
+                <!-- Footer -->
+                <footer class="manual-footer">
+                    <div>Copyright &copy; 2026 RojusScripts. All Rights Reserved.</div>
+                    <div>Developed with precision for Adobe After Effects.</div>
+                </footer>
+            </div>
+        </main>
+    </div>
+
+    <!-- Back to Top Button -->
+    <a href="#" class="back-to-top" title="Back to top">
+        <span>↑</span> Top
+    </a>
+
+    <!-- Interactive TOC Scripts (Search filter & Scrollspy) -->
+    <script>
+        // Real-time search filter for Table of Contents
+        const searchInput = document.getElementById('toc-search');
+        const tocItems = document.querySelectorAll('.toc-item');
+
+        searchInput.addEventListener('input', (e) => {
+            const query = e.target.value.toLowerCase().trim();
+            tocItems.forEach(item => {
+                const title = item.querySelector('.toc-title').textContent.toLowerCase();
+                if (!query || title.includes(query)) {
+                    item.style.display = 'block';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        });
+
+        // Keyboard shortcut Ctrl+K / Cmd+K to focus search
+        window.addEventListener('keydown', (e) => {
+            if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+                e.preventDefault();
+                searchInput.focus();
+                searchInput.select();
+            }
+        });
+
+        // Scrollspy for active heading highlight
+        const headings = document.querySelectorAll('.chapter-heading, .subsection-heading, .sub-subsection-heading');
+        const tocLinks = document.querySelectorAll('.toc-link');
+
+        function updateScrollspy() {
+            let currentActive = null;
+            const scrollPos = window.scrollY + 80;
+
+            headings.forEach(heading => {
+                const parent = heading.closest('section, div');
+                if (parent && parent.offsetTop <= scrollPos) {
+                    currentActive = parent.id;
+                }
+            });
+
+            if (currentActive) {
+                tocLinks.forEach(link => {
+                    if (link.getAttribute('href') === '#' + currentActive) {
+                        link.classList.add('active');
+                        // Auto-scroll sidebar if link is out of view
+                        const linkRect = link.getBoundingClientRect();
+                        const navRect = document.getElementById('sidebar-nav').getBoundingClientRect();
+                        if (linkRect.top < navRect.top || linkRect.bottom > navRect.bottom) {
+                            link.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+                        }
+                    } else {
+                        link.classList.remove('active');
+                    }
+                });
+            }
+        }
+
+        window.addEventListener('scroll', updateScrollspy, { passive: true });
+        updateScrollspy();
+    </script>
+</body>
+</html>
